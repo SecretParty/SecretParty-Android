@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/SecretParty/SecretParty.iml" filepath="$PROJECT_DIR$/SecretParty/SecretParty.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SecretPartyProject.iml" filepath="$PROJECT_DIR$/SecretPartyProject.iml" />
+    </modules>
+  </component>
+</project>
+
