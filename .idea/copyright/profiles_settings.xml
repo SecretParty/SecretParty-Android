@@ -1,5 +1,7 @@
 <component name="CopyrightManager">
-  <settings default="">
-    <module2copyright />
+  <settings default="SecretParty">
+    <module2copyright>
+      <element module="All" copyright="SecretParty" />
+    </module2copyright>
   </settings>
 </component>
