@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <!--
   ~ Copyright (C) 2014 Hugo DJEMAA / Jérémie BOUTOILLE / Mickael GOUBIN /
   ~     David LIVET - http://github.com/SecretParty/SecretParty-Android
@@ -17,12 +18,18 @@
   -->
 
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
+    <color name="holo_blue_dark">#0099CC</color>
+    <color name="holo_purple_dark">#9933CC</color>
+    <color name="holo_green_dark">#669900</color>
+    <color name="holo_orange_dark">#FF8800</color>
+    <color name="holo_red_dark">#CC0000</color>
+    <color name="text_dark">#ffffff</color>
 
-    <dimen name="listview_height">48dp</dimen>
-    <dimen name="initial_textSize">30dp</dimen>
-    <dimen name="listview_textSize">25dp</dimen>
-
+    <array name="pic_color">
+        <item>@color/holo_blue_dark</item>
+        <item>@color/holo_purple_dark</item>
+        <item>@color/holo_green_dark</item>
+        <item>@color/holo_orange_dark</item>
+        <item>@color/holo_red_dark</item>
+    </array>
 </resources>
