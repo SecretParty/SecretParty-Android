@@ -33,24 +33,25 @@
         android:text="OMG PARTY NAME"
         style="@style/AppTheme.partyTitle"/>
     <View
-        android:id="@+id/V_separator"
+        android:id="@+id/V_divider"
         android:layout_below="@id/TV_party_name"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/separator_size"
         android:background="@color/holo_orange_dark"/>
     <TextView
         android:id="@+id/TV_party_thema"
-        android:layout_below="@id/V_separator"
+        android:layout_below="@id/V_divider"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Thema"
+        android:textStyle="italic"
         android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@+id/TV_remaining_time"
+        android:layout_toLeftOf="@+id/TV_time_left"
         android:lines="1"
         android:textSize="@dimen/textSize_medium"/>
     <TextView
-        android:id="@id/TV_remaining_time"
-        android:layout_below="@id/V_separator"
+        android:id="@id/TV_time_left"
+        android:layout_below="@id/V_divider"
         android:layout_alignParentRight="true"
         android:text="10:00"
         android:layout_width="wrap_content"

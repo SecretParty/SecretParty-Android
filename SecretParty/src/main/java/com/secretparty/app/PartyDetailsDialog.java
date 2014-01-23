@@ -40,7 +40,6 @@ import java.util.List;
  * Created by MagicMicky on 23/01/14.
  */
 public class PartyDetailsDialog extends DialogFragment {
-    private static final String ARG_DIALOG_POS = "DIALOG_POS";
     private ThematicFragment.ThematicManager mCallback;
 
 
@@ -49,8 +48,8 @@ public class PartyDetailsDialog extends DialogFragment {
 
         // Supply num input as an argument.
         Bundle args = new Bundle();
-        args.putInt(ARG_DIALOG_POS, partyPos);
-        args.putInt(ThematicDetailedFragment.ARG_POSITION, thematicPos);
+        args.putInt(PartyFragment.PARTY_POS, partyPos);
+        args.putInt(ThematicDetailedFragment.THEMATIC_POS, thematicPos);
         f.setArguments(args);
 
         return f;
@@ -68,8 +67,8 @@ public class PartyDetailsDialog extends DialogFragment {
     }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        int thematicPos = getArguments().getInt(ThematicDetailedFragment.ARG_POSITION);
-        int partyPos = getArguments().getInt(ARG_DIALOG_POS);
+        int thematicPos = getArguments().getInt(ThematicDetailedFragment.THEMATIC_POS);
+        int partyPos = getArguments().getInt(PartyFragment.PARTY_POS);
 
         Party p = mCallback.getThematics().get(thematicPos).getCurrentParties().get(partyPos);
         UserAdapter adapter = new UserAdapter(this.getActivity(), p.getUsers());

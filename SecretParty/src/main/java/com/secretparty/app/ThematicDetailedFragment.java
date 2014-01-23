@@ -30,8 +30,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -42,7 +40,7 @@ import java.util.List;
  * Created by MagicMicky on 23/01/14.
  */
 public class ThematicDetailedFragment extends Fragment {
-    public static final String ARG_POSITION = "THEMATIC_POS";
+    public static final String THEMATIC_POS = "THEMATIC_POS";
     private ThematicFragment.ThematicManager mCallback;
 
     @Override
@@ -60,7 +58,7 @@ public class ThematicDetailedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final int thematicPos = getArguments().getInt(ARG_POSITION);
+        final int thematicPos = getArguments().getInt(THEMATIC_POS);
 
         View rootView = inflater.inflate(R.layout.listview_fragment, container, false);
         ListView party_list = (ListView) rootView.findViewById(R.id.list);

@@ -18,6 +18,8 @@
 
 package com.secretparty.app;
 
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -31,9 +33,12 @@ import com.secretparty.app.models.Thematic;
 import com.secretparty.app.models.User;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends ActionBarActivity implements ThematicFragment.ThematicManager {
+
+    private ArrayList<Thematic> thematics = new ArrayList<Thematic>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,10 +46,10 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new ThematicFragment())
-                    .commit();
+            ThematicsAsync async = new ThematicsAsync();
+            async.execute();
         }
+
     }
 
 
@@ -72,7 +77,7 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
     public void onThematicSelected(int pos) {
         ThematicDetailedFragment newFragment = new ThematicDetailedFragment();
         Bundle args = new Bundle();
-        args.putInt(ThematicDetailedFragment.ARG_POSITION, pos);
+        args.putInt(ThematicDetailedFragment.THEMATIC_POS, pos);
         newFragment.setArguments(args);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -83,35 +88,78 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
 
     @Override
     public List<Thematic> getThematics() {
-        ArrayList<Party> parties = new ArrayList<Party>();
-        User u = new User(1, "OMG IM A USER");
-        List<User> users = new ArrayList<User>();
-        users.add(u);
-        u = new User(1, "USER 2");
-        users.add(u);
-        u = new User(1, "user 3");
-        users.add(u);
-        parties.add(new Party(1,"partyxxx",null,20,users,null));
-        Thematic t = new Thematic(1,"OMG",parties, new ArrayList<Secret>());
-        parties.get(0).setThematic(t);
-        ArrayList<Thematic> thematics = new ArrayList<Thematic>();
-        thematics.add(t);
-
         return thematics;
     }
 
     @Override
     public void onPartyJoined(int pos) {
         Log.d("OMG", "party joined");
+
+
+        //Change Fragment
         PartyFragment newFragment = new PartyFragment();
         Bundle args = new Bundle();
-        args.putInt(ThematicDetailedFragment.ARG_POSITION, pos);
+        args.putInt(ThematicDetailedFragment.THEMATIC_POS, pos);
         newFragment.setArguments(args);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, newFragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    @Override
+    public Party getParty() {
+        //TODO
+        return null;
+    }
+    private class UserJoinPartyASync extends AsyncTask<Void, Void, User> {
+        private final Party mParty;
+        private final int mUserName;
+        private int mSecretId;
+
+        public UserJoinPartyASync(Party party, int userName, int secretId) {
+            this.mParty = party;
+            this.mUserName =userName;
+            this.mSecretId = secretId;
+        }
+        @Override
+        protected User doInBackground(Void... voids) {
+
+            //TODO Get the User response from the api and return it.
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(User user) {
+            SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+
+            Date end = new Date(mParty.getDate().getTime() + mParty.getLength());
+
+            //Save the info about the user and his in the SharedPreferences.
+            prefs.edit()
+                    .putInt(getString(R.string.SP_user_id), user.getId())
+                    .putLong(getString(R.string.SP_date_party_end),end.getTime() )
+            .commit();
+
+        }
+    }
+
+    private class ThematicsAsync extends AsyncTask<Void,Void,ArrayList<Thematic>> {
+
+        @Override
+        protected ArrayList<Thematic> doInBackground(Void... voids) {
+            return APISecretParty.getThematics(getString(R.string.server));
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Thematic> t){
+            thematics = t;
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, new ThematicFragment())
+                    .commit();
+
+        }
     }
 
 }

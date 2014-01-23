@@ -101,4 +101,17 @@ public class APISecretParty {
         u.setName(jsonUser.getString("name"));
         return u;
     }
+
+    public static User joinParty(int partyid, int secret, String name)  {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("name", partyid);
+            obj.put("party", secret);
+            obj.put("secret", name);
+            //TODO: call API and parse the response as a JSON user.
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
