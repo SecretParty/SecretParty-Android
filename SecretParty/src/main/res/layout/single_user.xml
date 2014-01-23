@@ -25,9 +25,8 @@
         android:id="@+id/TV_user_name"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="15dp"
         android:text="@string/default_partyname"
-        android:layout_toRightOf="@id/IMG_playing"
         android:textSize="@dimen/listview_textSize"
         android:gravity="center_vertical"
         />

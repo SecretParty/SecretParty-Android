@@ -114,7 +114,10 @@ public class PartyDetailsDialog extends DialogFragment {
         public long getItemId(int i) {
             return mUsers.get(i).getId();
         }
-
+        @Override
+        public boolean isEnabled(int pos) {
+            return false;
+        }
         @Override
         public View getView(int i, View convertView, ViewGroup parent) {
             if(convertView ==null) {
