@@ -87,4 +87,8 @@ public class Party {
     public void setThematic(Thematic thematic) {
         this.thematic = thematic;
     }
+
+    public boolean isPlaying() {
+        return this.getDate() != null;
+    }
 }
