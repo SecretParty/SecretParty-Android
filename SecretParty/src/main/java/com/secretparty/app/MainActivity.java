@@ -18,24 +18,20 @@
 
 package com.secretparty.app;
 
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 
 import com.secretparty.app.models.Party;
 import com.secretparty.app.models.Secret;
 import com.secretparty.app.models.Thematic;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends ActionBarActivity implements ThematicFragment.ThematicManager {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +40,7 @@ public class MainActivity extends ActionBarActivity {
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
+                    .add(R.id.container, new ThematicFragment())
                     .commit();
         }
     }
@@ -70,25 +66,29 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
+    @Override
+    public void onThematicSelected(int pos) {
+        ThematicDetailedFragment newFragment = new ThematicDetailedFragment();
+        Bundle args = new Bundle();
+        args.putInt(ThematicDetailedFragment.ARG_POSITION, pos);
+        newFragment.setArguments(args);
 
-        public PlaceholderFragment() {
-        }
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, newFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-            ListView thematic_list = (ListView) rootView.findViewById(R.id.LV_thematic);
-            ArrayList<Thematic> thematics = new ArrayList<Thematic>();
-            thematics.add(new Thematic(1,"OMG",new ArrayList<Party>(), new ArrayList<Secret>()));
-            ListAdapter mAdapter = new ThematicAdapter(this.getActivity(), thematics);
-            thematic_list.setAdapter(mAdapter);
-            return rootView;
-        }
+    @Override
+    public List<Thematic> getThematics() {
+        ArrayList<Party> parties = new ArrayList<Party>();
+        parties.add(new Party(1,"partyxxx",null,20,null,null));
+        Thematic t = new Thematic(1,"OMG",parties, new ArrayList<Secret>());
+        parties.get(0).setThematic(t);
+        ArrayList<Thematic> thematics = new ArrayList<Thematic>();
+        thematics.add(t);
+
+        return thematics;
     }
 
 }
