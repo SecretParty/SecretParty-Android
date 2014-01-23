@@ -27,6 +27,7 @@ import android.view.MenuItem;
 import com.secretparty.app.models.Party;
 import com.secretparty.app.models.Secret;
 import com.secretparty.app.models.Thematic;
+import com.secretparty.app.models.User;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -82,7 +83,14 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
     @Override
     public List<Thematic> getThematics() {
         ArrayList<Party> parties = new ArrayList<Party>();
-        parties.add(new Party(1,"partyxxx",null,20,null,null));
+        User u = new User(1, "OMG IM A USER");
+        List<User> users = new ArrayList<User>();
+        users.add(u);
+        u = new User(1, "USER 2");
+        users.add(u);
+        u = new User(1, "user 3");
+        users.add(u);
+        parties.add(new Party(1,"partyxxx",null,20,users,null));
         Thematic t = new Thematic(1,"OMG",parties, new ArrayList<Secret>());
         parties.get(0).setThematic(t);
         ArrayList<Thematic> thematics = new ArrayList<Thematic>();

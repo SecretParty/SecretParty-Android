@@ -21,10 +21,13 @@ package com.secretparty.app;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -33,17 +36,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.secretparty.app.models.Party;
-import com.secretparty.app.models.Secret;
-import com.secretparty.app.models.Thematic;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by MagicMicky on 23/01/14.
  */
 public class ThematicDetailedFragment extends Fragment {
-    public static final String ARG_POSITION = "_POS";
+    public static final String ARG_POSITION = "THEMATIC_POS";
     private ThematicFragment.ThematicManager mCallback;
 
     @Override
@@ -61,7 +60,7 @@ public class ThematicDetailedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        int thematicPos = getArguments().getInt(ARG_POSITION);
+        final int thematicPos = getArguments().getInt(ARG_POSITION);
 
         View rootView = inflater.inflate(R.layout.listview_fragment, container, false);
         ListView party_list = (ListView) rootView.findViewById(R.id.list);
@@ -69,6 +68,21 @@ public class ThematicDetailedFragment extends Fragment {
 
         PartyAdapter adapter = new PartyAdapter(this.getActivity(), mCallback.getThematics().get(thematicPos).getCurrentParties());
         party_list.setAdapter(adapter);
+        party_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                Fragment prev = getFragmentManager().findFragmentByTag("Dialog");
+                if(prev != null)
+                    ft.remove(prev);
+                ft.addToBackStack(null);
+                DialogFragment frag = PartyDetailsDialog.newInstance(thematicPos, i);
+                frag.show(ft, "dialog");
+            }
+        });
+
+
+
         return rootView;
     }
 
