@@ -18,6 +18,7 @@
 
 package com.secretparty.app;
 
+import com.secretparty.app.models.Party;
 import com.secretparty.app.models.Secret;
 import com.secretparty.app.models.Thematic;
 
@@ -44,11 +45,21 @@ public class APISecretParty {
                     Secret s = new Secret();
                     s.setId(((JSONObject)jsonSecret.get(i)).getInt("id"));
                     s.setName(((JSONObject) jsonSecret.get(i)).getString("name"));
-                    s.setHint(((JSONObject) jsonSecret.get(i)).getString("indication"));
+                    s.setHint(((JSONObject) jsonSecret.get(i)).getString("hint"));
                     s.setThematic(t);
                     listSecret.add(s);
                 }
                 t.setSecrets(listSecret);
+                ArrayList<Party> listParty = new ArrayList<Party>();
+                for(int j = 0; j<jsonSecret.length(); j++){
+                    Party s = new Party();
+                    s.setId(((JSONObject)jsonSecret.get(i)).getInt("id"));
+                    s.setName(((JSONObject) jsonSecret.get(i)).getString("name"));
+                    s.setLength(((JSONObject)jsonSecret.get(i)).getInt("length"));
+                    s.setThematic(t);
+                    listParty.add(s);
+                }
+                t.setCurrentParties(listParty);
                 list.add(t);
             } catch (JSONException e) {
                 e.printStackTrace();
