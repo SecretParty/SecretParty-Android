@@ -76,18 +76,21 @@ public class PartyDetailsDialog extends DialogFragment {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.party_join_dialog)
-                .setAdapter(adapter,null)
+                .setAdapter(adapter, null)
                 .setPositiveButton(R.string.join, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // FIRE ZE MISSILES!
+                        //TODO: join a party. Get the result. On result open the new dialog while saving info to db.
+                        dismiss();
+                        mCallback.onPartyJoined(id);
+
+
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // User cancelled the dialog
+                        // TODO
                     }
                 });
-        // Create the AlertDialog object and return it
         return builder.create();
     }
 

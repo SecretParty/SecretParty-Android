@@ -25,7 +25,7 @@
     <string name="default_thematic_initial">S</string>
     <string name="default_thematic">Secret Story</string>
     <string name="default_thematic_party_number">25</string>
-    <string name="default_partyname">Party!</string>
+    <string name="default_username">User N</string>
     <string name="party_join_dialog">Join a party</string>
     <string name="cancel">Cancel</string>
     <string name="join">Join</string>

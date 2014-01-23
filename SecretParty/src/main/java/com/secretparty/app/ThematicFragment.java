@@ -45,6 +45,7 @@ public class ThematicFragment extends Fragment {
     public interface ThematicManager {
         public void onThematicSelected(int pos);
         public List<Thematic> getThematics();
+        public void onPartyJoined(int pos);
     }
 
     @Override

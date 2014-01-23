@@ -21,6 +21,7 @@ package com.secretparty.app;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -97,6 +98,20 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
         thematics.add(t);
 
         return thematics;
+    }
+
+    @Override
+    public void onPartyJoined(int pos) {
+        Log.d("OMG", "party joined");
+        PartyFragment newFragment = new PartyFragment();
+        Bundle args = new Bundle();
+        args.putInt(ThematicDetailedFragment.ARG_POSITION, pos);
+        newFragment.setArguments(args);
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, newFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
 }
