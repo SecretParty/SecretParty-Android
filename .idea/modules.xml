@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/SecretParty/SecretParty.iml" filepath="$PROJECT_DIR$/SecretParty/SecretParty.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SecretParty-Android.iml" filepath="$PROJECT_DIR$/SecretParty-Android.iml" />
       <module fileurl="file://$PROJECT_DIR$/SecretPartyProject.iml" filepath="$PROJECT_DIR$/SecretPartyProject.iml" />
     </modules>
   </component>

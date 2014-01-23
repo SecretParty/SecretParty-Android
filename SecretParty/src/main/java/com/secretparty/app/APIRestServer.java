@@ -23,6 +23,8 @@ import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -34,6 +36,21 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class APIRestServer {
+
+    // Post JSON to the resteasy web service
+    public static HttpResponse doPost(String url, JSONObject c) throws ClientProtocolException, IOException
+    {
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpPost request = new HttpPost(url);
+        StringEntity s = new StringEntity(c.toString());
+        s.setContentEncoding("UTF-8");
+        s.setContentType("application/x-www-form-urlencoded");
+
+        request.setEntity(s);
+        request.addHeader("accept", "application/x-www-form-urlencoded");
+
+        return httpclient.execute(request);
+    }
 
     // Retrieve a resource from the resteasy web service
     public static JSONArray doGet(String url)
