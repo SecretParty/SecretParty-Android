@@ -19,7 +19,6 @@
 package com.secretparty.app;
 
 import android.support.v7.app.ActionBarActivity;
-import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -27,7 +26,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.os.Build;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+
+import com.secretparty.app.models.Party;
+import com.secretparty.app.models.Secret;
+import com.secretparty.app.models.Thematic;
+
+import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -76,6 +82,11 @@ public class MainActivity extends ActionBarActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                 Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+            ListView thematic_list = (ListView) rootView.findViewById(R.id.LV_thematic);
+            ArrayList<Thematic> thematics = new ArrayList<Thematic>();
+            thematics.add(new Thematic(1,"OMG",new ArrayList<Party>(), new ArrayList<Secret>()));
+            ListAdapter mAdapter = new ThematicAdapter(this.getActivity(), thematics);
+            thematic_list.setAdapter(mAdapter);
             return rootView;
         }
     }
