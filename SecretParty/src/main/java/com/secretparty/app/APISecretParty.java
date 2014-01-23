@@ -21,6 +21,7 @@ package com.secretparty.app;
 import com.secretparty.app.models.Party;
 import com.secretparty.app.models.Secret;
 import com.secretparty.app.models.Thematic;
+import com.secretparty.app.models.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,39 +33,72 @@ public class APISecretParty {
 
 
     public static ArrayList<Thematic> getThematics(String server){
+
         JSONArray json = APIRestServer.doGet(server+"thematics.json");
+
         ArrayList<Thematic> list = new ArrayList<Thematic>();
         for(int i = 0; i< json.length();i++){
-            Thematic t = new Thematic();
             try {
-                t.setId( ((JSONObject)json.get(i)).getInt("id") );
-                t.setName(((JSONObject)json.get(i)).getString("name"));
-                JSONArray jsonSecret = ((JSONObject) json.get(i)).getJSONArray("secrets");
-                ArrayList<Secret> listSecret = new ArrayList<Secret>();
-                for(int j = 0; j<jsonSecret.length(); j++){
-                    Secret s = new Secret();
-                    s.setId(((JSONObject)jsonSecret.get(i)).getInt("id"));
-                    s.setName(((JSONObject) jsonSecret.get(i)).getString("name"));
-                    s.setHint(((JSONObject) jsonSecret.get(i)).getString("hint"));
-                    s.setThematic(t);
-                    listSecret.add(s);
-                }
-                t.setSecrets(listSecret);
-                ArrayList<Party> listParty = new ArrayList<Party>();
-                for(int j = 0; j<jsonSecret.length(); j++){
-                    Party s = new Party();
-                    s.setId(((JSONObject)jsonSecret.get(i)).getInt("id"));
-                    s.setName(((JSONObject) jsonSecret.get(i)).getString("name"));
-                    s.setLength(((JSONObject)jsonSecret.get(i)).getInt("length"));
-                    s.setThematic(t);
-                    listParty.add(s);
-                }
-                t.setCurrentParties(listParty);
-                list.add(t);
+                list.add(parseThematic((JSONObject) json.get(i)));
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         }
+
         return list;
+    }
+
+    private static Thematic parseThematic(JSONObject json) throws JSONException {
+        Thematic t = new Thematic();
+        t.setId(json.getInt("id"));
+        t.setName(json.getString("name"));
+
+        // Add Secret
+        JSONArray jsonSecret = json.getJSONArray("secrets");
+        ArrayList<Secret> listSecret = new ArrayList<Secret>();
+        for(int i = 0; i<jsonSecret.length(); i++){
+            listSecret.add(parseSecret((JSONObject) jsonSecret.get(i),t));
+        }
+        t.setSecrets(listSecret);
+
+        // Add Parties
+        JSONArray jsonParty = json.getJSONArray("party");
+        ArrayList<Party> listParty = new ArrayList<Party>();
+        for(int i = 0; i<jsonParty.length(); i++){
+            listParty.add(parseParty((JSONObject) jsonParty.get(i),t));
+        }
+        t.setCurrentParties(listParty);
+        return t;
+    }
+
+    private static Party parseParty(JSONObject jsonParty, Thematic t) throws JSONException {
+        Party s = new Party();
+        s.setId(jsonParty.getInt("id"));
+        s.setName(jsonParty.getString("name"));
+        s.setLength(jsonParty.getInt("length"));
+        s.setThematic(t);
+
+        JSONArray jsonUser = jsonParty.getJSONArray("users");
+        ArrayList<User> listUser = new ArrayList<User>();
+        for(int i=0 ; i<jsonUser.length() ; i++){
+            listUser.add(parseUser((JSONObject) jsonUser.get(i),s));
+        }
+        return s;
+    }
+
+    private static Secret parseSecret(JSONObject jsonSecret, Thematic t) throws JSONException {
+        Secret s = new Secret();
+        s.setId(jsonSecret.getInt("id"));
+        s.setName(jsonSecret.getString("name"));
+        s.setHint(jsonSecret.getString("hint"));
+        s.setThematic(t);
+        return s;
+    }
+
+    private static User parseUser(JSONObject jsonUser, Party p) throws JSONException{
+        User u = new User();
+        u.setId(jsonUser.getInt("id"));
+        u.setName(jsonUser.getString("name"));
+        return u;
     }
 }

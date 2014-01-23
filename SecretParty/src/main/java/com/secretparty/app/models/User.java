@@ -30,6 +30,10 @@ public class User {
         this.setName(name);
     }
 
+    public User() {
+
+    }
+
     public int getId() {
         return id;
     }

@@ -40,6 +40,11 @@ public class Party {
         this.setLength(length);
         this.setThematic(thematic);
     }
+
+    public Party() {
+
+    }
+
     public int getId() {
         return id;
     }
