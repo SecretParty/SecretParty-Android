@@ -18,6 +18,7 @@
 
 package com.secretparty.app;
 
+import android.os.AsyncTask;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -34,16 +35,18 @@ import java.util.List;
 
 public class MainActivity extends ActionBarActivity implements ThematicFragment.ThematicManager {
 
+    private ArrayList<Thematic> thematics = new ArrayList<Thematic>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ThematicsAsync async = new ThematicsAsync();
+        async.execute();
 
-        if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new ThematicFragment())
-                    .commit();
-        }
+/*        if (savedInstanceState == null) {
+        }*/
+
     }
 
 
@@ -82,21 +85,24 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
 
     @Override
     public List<Thematic> getThematics() {
-        ArrayList<Party> parties = new ArrayList<Party>();
-        User u = new User(1, "OMG IM A USER");
-        List<User> users = new ArrayList<User>();
-        users.add(u);
-        u = new User(1, "USER 2");
-        users.add(u);
-        u = new User(1, "user 3");
-        users.add(u);
-        parties.add(new Party(1,"partyxxx",null,20,users,null));
-        Thematic t = new Thematic(1,"OMG",parties, new ArrayList<Secret>());
-        parties.get(0).setThematic(t);
-        ArrayList<Thematic> thematics = new ArrayList<Thematic>();
-        thematics.add(t);
-
         return thematics;
+    }
+
+    private class ThematicsAsync extends AsyncTask<Void,Void,ArrayList<Thematic>> {
+
+        @Override
+        protected ArrayList<Thematic> doInBackground(Void... voids) {
+            return APISecretParty.getThematics(getString(R.string.server));
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Thematic> t){
+            thematics = t;
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, new ThematicFragment())
+                    .commit();
+
+        }
     }
 
 }
