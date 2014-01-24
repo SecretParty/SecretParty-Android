@@ -66,4 +66,11 @@ public class Thematic {
     public void setSecrets(List<Secret> secrets) {
         this.secrets = secrets;
     }
+
+    public int getColor() {
+        char c1, c2;
+        c1 = getName().charAt(0);
+        c2 = getName().charAt(1);
+        return (c1 + c2<<1) * getId() % 5;
+    }
 }

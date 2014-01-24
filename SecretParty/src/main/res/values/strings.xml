@@ -29,5 +29,6 @@
     <string name="party_join_dialog">Join a party</string>
     <string name="cancel">Cancel</string>
     <string name="join">Join</string>
+    <string name="remainingTime">%1$d:%2$d</string>
 
 </resources>

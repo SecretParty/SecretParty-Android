@@ -72,7 +72,7 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
     public void onThematicSelected(int pos) {
         ThematicDetailedFragment newFragment = new ThematicDetailedFragment();
         Bundle args = new Bundle();
-        args.putInt(ThematicDetailedFragment.ARG_POSITION, pos);
+        args.putInt(ThematicDetailedFragment.THEMATIC_POS, pos);
         newFragment.setArguments(args);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -105,13 +105,19 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
         Log.d("OMG", "party joined");
         PartyFragment newFragment = new PartyFragment();
         Bundle args = new Bundle();
-        args.putInt(ThematicDetailedFragment.ARG_POSITION, pos);
+        args.putInt(ThematicDetailedFragment.THEMATIC_POS, pos);
         newFragment.setArguments(args);
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, newFragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    @Override
+    public Party getParty() {
+        //TODO
+        return null;
     }
 
 }

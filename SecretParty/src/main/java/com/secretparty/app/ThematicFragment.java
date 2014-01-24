@@ -31,6 +31,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.secretparty.app.models.Party;
 import com.secretparty.app.models.Thematic;
 
 import java.util.ArrayList;
@@ -46,6 +47,7 @@ public class ThematicFragment extends Fragment {
         public void onThematicSelected(int pos);
         public List<Thematic> getThematics();
         public void onPartyJoined(int pos);
+        public Party getParty();
     }
 
     @Override
@@ -117,7 +119,7 @@ public class ThematicFragment extends Fragment {
             Thematic t = this.getItem(position);
             convertView.setId(t.getId());
             initial.setText(""+t.getName().charAt(0));
-          //  initial.setBackgroundColor(R.array.pic_color);
+            initial.setBackgroundColor(mContext.getResources().getIntArray(R.array.pic_color)[t.getColor()]);
             thematicText.setText(t.getName());
             thematicNb.setText(""+t.getCurrentParties().size());
             return convertView;

@@ -25,43 +25,79 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.secretparty.app.models.Party;
 import com.secretparty.app.models.User;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by MagicMicky on 24/01/14.
  */
 public class PartyFragment extends Fragment {
+    public static final String PARTY_POS = "PARTY_POS";
+
+    private ThematicFragment.ThematicManager mCallback;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            mCallback = (ThematicFragment.ThematicManager) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnHeadlineSelectedListener");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.party_layout, container, false);
+        TextView partyName, partyTimeLeft, partyThematic;
+        View divider;
+        ListView thematic_list;
+        Party currentParty = mCallback.getParty();
 
-        User us = new User(1, "OMG");
-        List<User> users = new ArrayList<User>();
-        users.add(us);
-        us = new User(2,"WTD");
-        users.add(us);
-        us = new User(3, "OMG2");
-        users.add(us);
-        us = new User(5, "I'm a very very very very very very very very very very very very very very long user");
-        users.add(us);
-        ListView thematic_list = (ListView) rootView.findViewById(R.id.list);
+        partyName = (TextView) rootView.findViewById(R.id.TV_party_name);
+        partyTimeLeft = (TextView) rootView.findViewById(R.id.TV_time_left);
+        partyThematic = (TextView) rootView.findViewById(R.id.TV_party_thema);
+        divider = rootView.findViewById(R.id.V_divider);
+        thematic_list = (ListView) rootView.findViewById(R.id.list);
 
-        ListAdapter mAdapter = new UserAdapter(this.getActivity(), users);
+        partyName.setText(currentParty.getName());
+        partyThematic.setText(currentParty.getThematic().getName());
+        partyTimeLeft.setText(getRemainingTimeString(currentParty.getDate()));
+
+        divider.setBackgroundColor(getResources().getIntArray(R.array.pic_color)[currentParty.getThematic().getColor()]);
+
+        ListAdapter mAdapter = new UserAdapter(this.getActivity(), currentParty.getUsers());
         thematic_list.setAdapter(mAdapter);
         thematic_list.setOnItemClickListener(null);
         return rootView;
     }
+
+    private String getRemainingTimeString(Date end) {
+        Calendar c1 = Calendar.getInstance();
+        c1.setTime(new Date());
+        Calendar c2 = Calendar.getInstance();
+        c2.setTime(end);
+        long mil1 = c1.getTimeInMillis();
+        long mil2 = c2.getTimeInMillis();
+        long diff = mil1 - mil2;
+        long sec = diff / 1000;
+        long min = diff / (60*1000);
+        return getString(R.string.remainingTime, sec, min);
+    }
+
+
 
     private class UserAdapter extends BaseAdapter {
         private final Context mContext;
