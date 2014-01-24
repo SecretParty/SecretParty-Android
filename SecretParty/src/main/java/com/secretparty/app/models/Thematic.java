@@ -18,6 +18,7 @@
 
 package com.secretparty.app.models;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,8 +27,8 @@ import java.util.List;
 public class Thematic {
     private int id;
     private String name;
-    private List<Party> currentParties;
-    private List<Secret> secrets;
+    private List<Party> currentParties = new ArrayList<Party>();
+    private List<Secret> secrets= new ArrayList<Secret>();
 
     public Thematic(int id, String name, List<Party> parties, List<Secret> secrets) {
         this.setId(id);
@@ -35,6 +36,11 @@ public class Thematic {
         this.setCurrentParties(parties);
         this.setSecrets(secrets);
     }
+
+    public Thematic() {
+
+    }
+
     public int getId() {
         return id;
     }

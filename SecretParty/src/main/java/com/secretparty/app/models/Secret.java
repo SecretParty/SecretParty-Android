@@ -33,6 +33,11 @@ public class Secret {
         this.setThematic(thematic);
         this.setName(name);
     }
+
+    public Secret() {
+
+    }
+
     public int getId() {
         return id;
     }
