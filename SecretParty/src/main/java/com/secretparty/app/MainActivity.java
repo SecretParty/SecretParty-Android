@@ -146,18 +146,17 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
 
     private class UserJoinPartyASync extends AsyncTask<Void, Void, User> {
         private final Party mParty;
-        private final int mUserName;
+        private final String mUserName;
         private int mSecretId;
 
-        public UserJoinPartyASync(Party party, int userName, int secretId) {
+        public UserJoinPartyASync(Party party, String userName, int secretId) {
             this.mParty = party;
             this.mUserName =userName;
             this.mSecretId = secretId;
         }
         @Override
         protected User doInBackground(Void... voids) {
-
-            //TODO Get the User response from the api and return it.
+            APISecretParty.joinParty(mParty.getId(),mSecretId,mUserName,getString(R.string.server));
             return null;
         }
 

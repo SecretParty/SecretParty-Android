@@ -27,6 +27,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class APISecretParty {
@@ -102,14 +103,17 @@ public class APISecretParty {
         return u;
     }
 
-    public static User joinParty(int partyid, int secret, String name)  {
+    public static User joinParty(int partyid, int secret, String name, String server)  {
         JSONObject obj = new JSONObject();
         try {
             obj.put("name", partyid);
             obj.put("party", secret);
             obj.put("secret", name);
-            //TODO: call API and parse the response as a JSON user.
+            APIRestServer.doPost(server + "thematics.json", obj);
+
         } catch (JSONException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
