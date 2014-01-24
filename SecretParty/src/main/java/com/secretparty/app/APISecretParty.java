@@ -21,6 +21,7 @@ package com.secretparty.app;
 import com.secretparty.app.models.Party;
 import com.secretparty.app.models.Secret;
 import com.secretparty.app.models.Thematic;
+import com.secretparty.app.models.User;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -66,5 +67,17 @@ public class APISecretParty {
             }
         }
         return list;
+    }
+
+    public static User joinParty(int partyid, int secret, String name)  {
+        JSONObject obj = new JSONObject();
+        try {
+            obj.put("name", partyid);
+            obj.put("party", secret);
+            obj.put("secret", name);
+            //TODO: call API and parse the response as a JSON user.
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }

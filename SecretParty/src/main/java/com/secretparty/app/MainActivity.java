@@ -18,6 +18,7 @@
 
 package com.secretparty.app;
 
+import android.os.AsyncTask;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -29,6 +30,9 @@ import com.secretparty.app.models.Party;
 import com.secretparty.app.models.Secret;
 import com.secretparty.app.models.Thematic;
 import com.secretparty.app.models.User;
+
+import org.json.JSONObject;
+import org.json.JSONStringer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,6 +107,9 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
     @Override
     public void onPartyJoined(int pos) {
         Log.d("OMG", "party joined");
+
+
+        //Change Fragment
         PartyFragment newFragment = new PartyFragment();
         Bundle args = new Bundle();
         args.putInt(ThematicDetailedFragment.THEMATIC_POS, pos);
@@ -119,5 +126,21 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
         //TODO
         return null;
     }
+    private class UserJoinPartyASync extends AsyncTask<Party, Void, User> {
+        private final int mPartyId;
+        private final int mUserName;
+        private int mSecretId;
 
+        public UserJoinPartyASync(int partyId, int userName, int secretId) {
+            this.mPartyId = partyId;
+            this.mUserName =userName;
+            this.mSecretId = secretId;
+        }
+        @Override
+        protected User doInBackground(Party... parties) {
+
+
+            return null;
+        }
+    }
 }
