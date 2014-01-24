@@ -21,19 +21,27 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/listview_height">
-    <ImageView
-        android:id="@+id/IMG_playing"
-        android:layout_width="@dimen/listview_height"
-        android:layout_height="match_parent"
-        android:src="@android:drawable/ic_media_play"/>
     <TextView
-        android:id="@+id/TV_party_name"
+        android:id="@+id/TV_user_name"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="5dp"
+        android:layout_marginLeft="15dp"
         android:text="@string/default_username"
-        android:layout_toRightOf="@id/IMG_playing"
         android:textSize="@dimen/listview_textSize"
         android:gravity="center_vertical"
+        android:layout_toLeftOf="@+id/BTN_buzz"
+        android:lines="1"
+        android:ellipsize="end"
+
+        />
+    <ImageButton
+        android:id="@id/BTN_buzz"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="?android:borderlessButtonStyle"
+        android:layout_alignParentRight="true"
+        android:src="@android:drawable/ic_menu_send"
+        android:lines="1"
+        android:ellipsize="end"
         />
 </RelativeLayout>

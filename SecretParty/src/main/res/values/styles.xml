@@ -22,5 +22,11 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
     </style>
+    <style name="AppTheme.partyTitle">
+        <item name="android:textSize">30sp</item>
+        <item name="android:gravity">center_horizontal</item>
+        <item name="android:padding">5dp</item>
+        <item name="android:typeface">sans</item>
+    </style>
 
 </resources>
