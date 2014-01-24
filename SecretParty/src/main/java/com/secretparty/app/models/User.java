@@ -24,6 +24,7 @@ package com.secretparty.app.models;
 public class User {
     private int id;
     private String name;
+    private Party party;
 
     public User(int id, String name) {
         this.setId(id);
@@ -44,5 +45,13 @@ public class User {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Party getParty() {
+        return party;
+    }
+
+    public void setParty(Party party) {
+        this.party = party;
     }
 }
