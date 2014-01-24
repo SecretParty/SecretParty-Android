@@ -46,7 +46,7 @@ public class ThematicFragment extends Fragment {
     public interface ThematicManager {
         public void onThematicSelected(int pos);
         public List<Thematic> getThematics();
-        public void onPartyJoined(int pos);
+        public void onPartyJoined(int thematicPos, int partyPos, String username, int secretId);
         public Party getParty();
     }
 

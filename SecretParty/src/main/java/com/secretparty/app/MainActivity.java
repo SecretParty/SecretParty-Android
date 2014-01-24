@@ -28,7 +28,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.secretparty.app.models.Party;
-import com.secretparty.app.models.Secret;
 import com.secretparty.app.models.Thematic;
 import com.secretparty.app.models.User;
 
@@ -39,6 +38,7 @@ import java.util.List;
 public class MainActivity extends ActionBarActivity implements ThematicFragment.ThematicManager {
 
     private ArrayList<Thematic> thematics = new ArrayList<Thematic>();
+    private Party mCurrentParty=null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +46,18 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
         setContentView(R.layout.activity_main);
 
         if (savedInstanceState == null) {
-            ThematicsAsync async = new ThematicsAsync();
-            async.execute();
+            SharedPreferences prefs = this.getPreferences(MODE_PRIVATE);
+            int userId = prefs.getInt(getString(R.string.SP_user_id), -1);
+            int partyId = prefs.getInt(getString(R.string.SP_party_id), -1);
+            long partyEnd = prefs.getLong(getString(R.string.SP_date_party_end), -1);
+            if(new Date().compareTo(new Date(partyEnd)) > 0) {
+                GetPartyAsync getPartyAsync = new GetPartyAsync();
+                getPartyAsync.execute(partyId);
+            } else {
+                ThematicsAsync async = new ThematicsAsync();
+                async.execute();
+            }
+            
         }
 
     }
@@ -92,11 +102,11 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
     }
 
     @Override
-    public void onPartyJoined(int pos) {
+    public void onPartyJoined(int thematicPos, int partyPos, String username, int secretId) {
         Log.d("OMG", "party joined");
 
-
-        //Change Fragment
+        UserJoinPartyASync join = new UserJoinPartyASync(getThematics().get(thematicPos).getCurrentParties().get(partyPos), 0,0 );
+       /* //Change Fragment
         PartyFragment newFragment = new PartyFragment();
         Bundle args = new Bundle();
         args.putInt(ThematicDetailedFragment.THEMATIC_POS, pos);
@@ -105,14 +115,35 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, newFragment);
         transaction.addToBackStack(null);
-        transaction.commit();
+        transaction.commit();*/
+
+
+
     }
 
     @Override
     public Party getParty() {
-        //TODO
-        return null;
+        return mCurrentParty;
     }
+
+    private void loadPartyFragment() {
+        loadPartyFragment(-1);
+    }
+    private void loadPartyFragment(int pos) {
+        PartyFragment newFragment = new PartyFragment();
+        if(pos!=-1) {
+            Bundle args = new Bundle();
+            args.putInt(ThematicDetailedFragment.THEMATIC_POS, pos);
+            newFragment.setArguments(args);
+
+        }
+
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, newFragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
     private class UserJoinPartyASync extends AsyncTask<Void, Void, User> {
         private final Party mParty;
         private final int mUserName;
@@ -140,8 +171,10 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
             prefs.edit()
                     .putInt(getString(R.string.SP_user_id), user.getId())
                     .putLong(getString(R.string.SP_date_party_end),end.getTime() )
+                    .putInt(getString(R.string.SP_party_id), mParty.getId())
             .commit();
-
+            MainActivity.this.mCurrentParty = mParty;
+            loadPartyFragment();
         }
     }
 
@@ -159,6 +192,22 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
                     .add(R.id.container, new ThematicFragment())
                     .commit();
 
+        }
+    }
+    
+    private class GetPartyAsync extends AsyncTask<Integer, Void, Party> {
+
+        @Override
+        protected Party doInBackground(Integer... integers) {
+            int partyId = integers[0];
+            //TODO : get party
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Party party) {
+            MainActivity.this.mCurrentParty = party;
+            loadPartyFragment();
         }
     }
 

@@ -29,9 +29,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.secretparty.app.models.Party;
+import com.secretparty.app.models.Secret;
 import com.secretparty.app.models.User;
 
 import java.util.List;
@@ -41,7 +44,7 @@ import java.util.List;
  */
 public class PartyDetailsDialog extends DialogFragment {
     private ThematicFragment.ThematicManager mCallback;
-
+    private int secretChosen = 0;
 
     static PartyDetailsDialog newInstance(int thematicPos, int partyPos) {
         PartyDetailsDialog f = new PartyDetailsDialog();
@@ -67,22 +70,20 @@ public class PartyDetailsDialog extends DialogFragment {
     }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        int thematicPos = getArguments().getInt(ThematicDetailedFragment.THEMATIC_POS);
-        int partyPos = getArguments().getInt(PartyFragment.PARTY_POS);
-
+        final int thematicPos = getArguments().getInt(ThematicDetailedFragment.THEMATIC_POS);
+        final int partyPos = getArguments().getInt(PartyFragment.PARTY_POS);
         Party p = mCallback.getThematics().get(thematicPos).getCurrentParties().get(partyPos);
-        UserAdapter adapter = new UserAdapter(this.getActivity(), p.getUsers());
+        final List<Secret> secrets = mCallback.getThematics().get(thematicPos).getSecrets();
+
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.party_join_dialog)
-                .setAdapter(adapter, null)
+        builder.setView(getDialog().getLayoutInflater().inflate(R.layout.join_party_layout, null))
+                .setTitle(R.string.party_join_dialog)
                 .setPositiveButton(R.string.join, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        //TODO: join a party. Get the result. On result open the new dialog while saving info to db.
+                        String username = String.valueOf(((EditText) getDialog().findViewById(R.id.ET_username)).getText());
                         dismiss();
-                        mCallback.onPartyJoined(id);
-
-
+                        mCallback.onPartyJoined(thematicPos, partyPos, username, secrets.get(secretChosen).getId());
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
