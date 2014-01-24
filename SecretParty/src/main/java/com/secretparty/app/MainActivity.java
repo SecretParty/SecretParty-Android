@@ -50,7 +50,7 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
             int userId = prefs.getInt(getString(R.string.SP_user_id), -1);
             int partyId = prefs.getInt(getString(R.string.SP_party_id), -1);
             long partyEnd = prefs.getLong(getString(R.string.SP_date_party_end), -1);
-            if(new Date().compareTo(new Date(partyEnd)) > 0) {
+            if(new Date().compareTo(new Date(partyEnd)) < 0) {
                 GetPartyAsync getPartyAsync = new GetPartyAsync();
                 getPartyAsync.execute(partyId);
             } else {

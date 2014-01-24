@@ -18,6 +18,8 @@
 
 package com.secretparty.app;
 
+import android.util.Log;
+
 import com.secretparty.app.models.Party;
 import com.secretparty.app.models.Secret;
 import com.secretparty.app.models.Thematic;
@@ -35,8 +37,8 @@ public class APISecretParty {
 
     public static ArrayList<Thematic> getThematics(String server){
 
-        JSONArray json = APIRestServer.doGet(server+"thematics.json");
-
+        JSONArray json = APIRestServer.doGet(server+"thematics");
+        Log.d("APISecretParty", server+"thematics");
         ArrayList<Thematic> list = new ArrayList<Thematic>();
         for(int i = 0; i< json.length();i++){
             try {
@@ -63,10 +65,12 @@ public class APISecretParty {
         t.setSecrets(listSecret);
 
         // Add Parties
-        JSONArray jsonParty = json.getJSONArray("party");
         ArrayList<Party> listParty = new ArrayList<Party>();
-        for(int i = 0; i<jsonParty.length(); i++){
-            listParty.add(parseParty((JSONObject) jsonParty.get(i),t));
+        if(json.has("party")) {
+            JSONArray jsonParty = json.getJSONArray("parties");
+            for(int i = 0; i<jsonParty.length(); i++){
+                listParty.add(parseParty((JSONObject) jsonParty.get(i),t));
+            }
         }
         t.setCurrentParties(listParty);
         return t;
@@ -109,7 +113,7 @@ public class APISecretParty {
             obj.put("name", partyid);
             obj.put("party", secret);
             obj.put("secret", name);
-            APIRestServer.doPost(server + "thematics.json", obj);
+            APIRestServer.doPost(server + "user", obj);
 
         } catch (JSONException e) {
             e.printStackTrace();
