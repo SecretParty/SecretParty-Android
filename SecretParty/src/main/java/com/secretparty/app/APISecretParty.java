@@ -66,7 +66,7 @@ public class APISecretParty {
 
         // Add Parties
         ArrayList<Party> listParty = new ArrayList<Party>();
-        if(json.has("party")) {
+        if(json.has("parties")) {
             JSONArray jsonParty = json.getJSONArray("parties");
             for(int i = 0; i<jsonParty.length(); i++){
                 listParty.add(parseParty((JSONObject) jsonParty.get(i),t));
