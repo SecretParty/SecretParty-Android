@@ -69,4 +69,8 @@ public class Secret {
     public void setThematic(Thematic thematic) {
         this.thematic = thematic;
     }
+    @Override
+    public String toString() {
+        return this.getName();
+    }
 }

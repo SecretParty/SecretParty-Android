@@ -25,9 +25,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -75,9 +78,23 @@ public class PartyDetailsDialog extends DialogFragment {
         Party p = mCallback.getThematics().get(thematicPos).getCurrentParties().get(partyPos);
         final List<Secret> secrets = mCallback.getThematics().get(thematicPos).getSecrets();
 
+        View rootView = getDialog().getLayoutInflater().inflate(R.layout.join_party_layout, null);
+        Spinner secret = (Spinner) rootView.findViewById(R.id.S_secrets);
+        ArrayAdapter<Secret> adapter = new ArrayAdapter<Secret>(getActivity(), android.R.layout.simple_spinner_item, secrets);
+        secret.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                Log.v("PartyDialog", "Item click on " + position);
+                secretChosen = position;
+            }
+        });
+        secret.setAdapter(adapter);
+
+
+
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setView(getDialog().getLayoutInflater().inflate(R.layout.join_party_layout, null))
+        builder.setView(rootView)
                 .setTitle(R.string.party_join_dialog)
                 .setPositiveButton(R.string.join, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {

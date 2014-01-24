@@ -105,7 +105,8 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
     public void onPartyJoined(int thematicPos, int partyPos, String username, int secretId) {
         Log.d("OMG", "party joined");
 
-        UserJoinPartyASync join = new UserJoinPartyASync(getThematics().get(thematicPos).getCurrentParties().get(partyPos), 0,0 );
+        UserJoinPartyASync join = new UserJoinPartyASync(getThematics().get(thematicPos).getCurrentParties().get(partyPos), username,secretId );
+        join.execute();
        /* //Change Fragment
         PartyFragment newFragment = new PartyFragment();
         Bundle args = new Bundle();
