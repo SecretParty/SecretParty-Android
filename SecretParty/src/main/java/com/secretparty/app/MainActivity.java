@@ -18,6 +18,7 @@
 
 package com.secretparty.app;
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
@@ -31,10 +32,8 @@ import com.secretparty.app.models.Secret;
 import com.secretparty.app.models.Thematic;
 import com.secretparty.app.models.User;
 
-import org.json.JSONObject;
-import org.json.JSONStringer;
-
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends ActionBarActivity implements ThematicFragment.ThematicManager {
@@ -126,21 +125,35 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
         //TODO
         return null;
     }
-    private class UserJoinPartyASync extends AsyncTask<Party, Void, User> {
-        private final int mPartyId;
+    private class UserJoinPartyASync extends AsyncTask<Void, Void, User> {
+        private final Party mParty;
         private final int mUserName;
         private int mSecretId;
 
-        public UserJoinPartyASync(int partyId, int userName, int secretId) {
-            this.mPartyId = partyId;
+        public UserJoinPartyASync(Party party, int userName, int secretId) {
+            this.mParty = party;
             this.mUserName =userName;
             this.mSecretId = secretId;
         }
         @Override
-        protected User doInBackground(Party... parties) {
+        protected User doInBackground(Void... voids) {
 
-
+            //TODO Get the User response from the api and return it.
             return null;
+        }
+
+        @Override
+        protected void onPostExecute(User user) {
+            SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+
+            Date end = new Date(mParty.getDate().getTime() + mParty.getLength());
+
+            //Save the info about the user and his in the SharedPreferences.
+            prefs.edit()
+                    .putInt(getString(R.string.SP_user_id), user.getId())
+                    .putLong(getString(R.string.SP_date_party_end),end.getTime() )
+            .commit();
+
         }
     }
 }
