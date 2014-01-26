@@ -256,8 +256,38 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
     }
 
     @Override
-    public void onPartyCreated(int thematicId, int secretId, String partyName, int duration) {
-        //TODO: call the API with the correct syntax and args.
+    public void onPartyCreated(final int thematicId, final int secretId, final String partyName, final int duration) {
+        // Send request Volley join party
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,getString(R.string.server)+"party",null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject jsonObject) {
+                        Log.d("Call API", "POST party");
+
+                    }
+                }, new Response.ErrorListener(){
+            @Override
+            public void onErrorResponse(VolleyError volleyError) {
+                Log.d("Call API", "ERROR POST party : "+volleyError.getMessage());
+            }
+        }) {
+            @Override
+            protected Map<String,String> getParams(){
+                Map<String,String> params = new HashMap<String, String>();
+
+                params.put("party_user[party][name]",partyName);
+                params.put("party_user[party][length]",Integer.toString(duration));
+                params.put("party_user[party][thematic]",Integer.toString(thematicId));
+                params.put("party_user[user][name]",);
+                params.put("party_user[user][secret]",Integer.toString(secretId));
+
+                return params;
+            }
+        };
+        request.setTag(this);
+
+        // Add request in queue
+        mRequestQueue.add(request);
     }
 
     private void loadPartyFragment() {
