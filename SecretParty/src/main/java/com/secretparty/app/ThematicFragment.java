@@ -51,7 +51,7 @@ public class ThematicFragment extends Fragment {
         public void onPartyJoined(int thematicPos, int partyPos, String username, int secretId);
         public Party getParty();
 
-        void onPartyCreated(int thematicId, int secretId, String partyName, int duration);
+        void onPartyCreated(int thematicId, int secretId, String partyName, int duration, String username);
     }
 
     @Override

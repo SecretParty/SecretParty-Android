@@ -256,7 +256,7 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
     }
 
     @Override
-    public void onPartyCreated(final int thematicId, final int secretId, final String partyName, final int duration) {
+    public void onPartyCreated(final int thematicId, final int secretId, final String partyName, final int duration, final String username) {
         // Send request Volley join party
         JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,getString(R.string.server)+"party",null,
                 new Response.Listener<JSONObject>() {
@@ -278,7 +278,7 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
                 params.put("party_user[party][name]",partyName);
                 params.put("party_user[party][length]",Integer.toString(duration));
                 params.put("party_user[party][thematic]",Integer.toString(thematicId));
-                params.put("party_user[user][name]",);
+                params.put("party_user[user][name]",username);
                 params.put("party_user[user][secret]",Integer.toString(secretId));
 
                 return params;

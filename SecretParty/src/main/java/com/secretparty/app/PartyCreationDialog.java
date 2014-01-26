@@ -107,7 +107,7 @@ public class PartyCreationDialog extends DialogFragment {
                         Thematic t = mCallback.getThematics().get(thematicChosen);
                         Secret s = t.getSecrets().get(secretChosen);
                         dismiss();
-                        mCallback.onPartyCreated(t.getId(),s.getId(),partyName,duration);
+                        mCallback.onPartyCreated(t.getId(),s.getId(),partyName,duration, username);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
