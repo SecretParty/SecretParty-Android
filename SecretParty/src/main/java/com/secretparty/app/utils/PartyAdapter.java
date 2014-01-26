@@ -40,10 +40,12 @@ public class PartyAdapter {
         s.setLength(jsonParty.getInt("length"));
         s.setThematic(t);
 
-        JSONArray jsonUser = jsonParty.getJSONArray("users");
-        ArrayList<User> listUser = new ArrayList<User>();
-        for(int i=0 ; i<jsonUser.length() ; i++){
-            listUser.add(UserAdpater.parseUser((JSONObject) jsonUser.get(i)));
+        if(jsonParty.has("users")){
+            JSONArray jsonUser = jsonParty.getJSONArray("users");
+            ArrayList<User> listUser = new ArrayList<User>();
+            for(int i=0 ; i<jsonUser.length() ; i++){
+                listUser.add(UserAdpater.parseUser((JSONObject) jsonUser.get(i)));
+            }
         }
         return s;
     }

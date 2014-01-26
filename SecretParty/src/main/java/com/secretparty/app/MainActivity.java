@@ -19,7 +19,6 @@
 package com.secretparty.app;
 
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -29,6 +28,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
@@ -38,6 +38,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.secretparty.app.models.Party;
 import com.secretparty.app.models.Thematic;
 import com.secretparty.app.models.User;
+import com.secretparty.app.utils.CustomJsonObjectRequest;
 import com.secretparty.app.utils.PartyAdapter;
 import com.secretparty.app.utils.ThematicAdpater;
 import com.secretparty.app.utils.UserAdpater;
@@ -191,7 +192,7 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
         final Party party = getThematics().get(thematicPos).getCurrentParties().get(partyPos);
 
         // Send request Volley join party
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,getString(R.string.server)+"user",null,
+        CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.POST,getString(R.string.server)+"user",
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
@@ -222,7 +223,7 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
                     }
                 }) {
             @Override
-            protected Map<String,String> getParams(){
+            protected Map<String,String> getParams() throws AuthFailureError{
                 Map<String,String> params = new HashMap<String, String>();
 
                 params.put("user[name]",username);
@@ -258,17 +259,22 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
     @Override
     public void onPartyCreated(final int thematicId, final int secretId, final String partyName, final int duration, final String username) {
         // Send request Volley join party
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST,getString(R.string.server)+"party",null,
+        CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.POST,getString(R.string.server)+"party",
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject jsonObject) {
                         Log.d("Call API", "POST party");
-
+                        try {
+                            mCurrentParty = PartyAdapter.parseParty(jsonObject);
+                        } catch (JSONException e) {
+                            Log.d("Call API", "ERROR POST party : " + e.getMessage());
+                        }
                     }
                 }, new Response.ErrorListener(){
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                Log.d("Call API", "ERROR POST party : "+volleyError.getMessage());
+                Log.d("Call API", "ERROR POST party : "+ volleyError.networkResponse.headers);
+
             }
         }) {
             @Override
@@ -285,7 +291,7 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
             }
         };
         request.setTag(this);
-
+        System.out.println(request.getBodyContentType());
         // Add request in queue
         mRequestQueue.add(request);
     }
