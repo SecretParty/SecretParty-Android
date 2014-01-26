@@ -20,6 +20,8 @@ package com.secretparty.app;
 
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.support.v4.app.DialogFragment;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -139,7 +141,7 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
     public boolean onCreateOptionsMenu(Menu menu) {
         
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.menu_add_party, menu);
         return true;
     }
 
@@ -151,6 +153,16 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
         switch (item.getItemId()) {
             case R.id.action_settings:
                 return true;
+            case R.id.action_add:
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                Fragment prev = getSupportFragmentManager().findFragmentByTag("Dialog");
+                if(prev != null)
+                    ft.remove(prev);
+                ft.addToBackStack(null);
+                DialogFragment frag = PartyCreationDialog.newInstance();
+                frag.show(ft, "dialog");
+                return true;
+
         }
         return super.onOptionsItemSelected(item);
     }
