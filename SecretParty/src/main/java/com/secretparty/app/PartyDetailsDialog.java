@@ -81,11 +81,16 @@ public class PartyDetailsDialog extends DialogFragment {
         View rootView = getDialog().getLayoutInflater().inflate(R.layout.join_party_layout, null);
         Spinner secret = (Spinner) rootView.findViewById(R.id.S_secrets);
         ArrayAdapter<Secret> adapter = new ArrayAdapter<Secret>(getActivity(), android.R.layout.simple_spinner_item, secrets);
-        secret.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        secret.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 Log.v("PartyDialog", "Item click on " + position);
                 secretChosen = position;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                secretChosen=-1;
             }
         });
         secret.setAdapter(adapter);
