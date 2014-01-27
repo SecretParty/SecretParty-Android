@@ -21,42 +21,32 @@ package com.secretparty.app;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.secretparty.app.models.Party;
 import com.secretparty.app.models.Secret;
-import com.secretparty.app.models.User;
+import com.secretparty.app.models.Thematic;
 
 import java.util.List;
 
 /**
- * Created by MagicMicky on 23/01/14.
+ * Created by MagicMicky on 24/01/14.
  */
-public class PartyDetailsDialog extends DialogFragment {
+public class PartyCreationDialog extends DialogFragment {
     private ThematicFragment.ThematicManager mCallback;
     private int secretChosen = 0;
+    private int thematicChosen = 0;
 
-    static PartyDetailsDialog newInstance(int thematicPos, int partyPos) {
-        PartyDetailsDialog f = new PartyDetailsDialog();
-
-        // Supply num input as an argument.
-        Bundle args = new Bundle();
-        args.putInt(PartyFragment.PARTY_POS, partyPos);
-        args.putInt(ThematicDetailedFragment.THEMATIC_POS, thematicPos);
-        f.setArguments(args);
+    static PartyCreationDialog newInstance() {
+        PartyCreationDialog f = new PartyCreationDialog();
 
         return f;
     }
@@ -71,25 +61,27 @@ public class PartyDetailsDialog extends DialogFragment {
                     + " must implement OnHeadlineSelectedListener");
         }
     }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final int thematicPos = getArguments().getInt(ThematicDetailedFragment.THEMATIC_POS);
-        final int partyPos = getArguments().getInt(PartyFragment.PARTY_POS);
-        Party p = mCallback.getThematics().get(thematicPos).getCurrentParties().get(partyPos);
-        final List<Secret> secrets = mCallback.getThematics().get(thematicPos).getSecrets();
-
+       // final List<Secret> secrets = mCallback.getThematics().get(thematicPos).getSecrets();
+        final List<Thematic> thematics = mCallback.getThematics();
         View rootView = getDialog().getLayoutInflater().inflate(R.layout.join_party_layout, null);
-        Spinner secret = (Spinner) rootView.findViewById(R.id.S_secrets);
-        ArrayAdapter<Secret> adapter = new ArrayAdapter<Secret>(getActivity(), android.R.layout.simple_spinner_item, secrets);
-        secret.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        final Spinner secret = (Spinner) rootView.findViewById(R.id.S_secrets);
+
+        Spinner thematic = (Spinner) rootView.findViewById(R.id.S_theme);
+        ArrayAdapter<Thematic> thematicArrayAdapter = new ArrayAdapter<Thematic>(getActivity(),android.R.layout.simple_spinner_item, thematics);
+       // ArrayAdapter<Secret> adapter = new ArrayAdapter<Secret>(getActivity(), android.R.layout.simple_spinner_item, secrets);
+        thematic.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                Log.v("PartyDialog", "Item click on " + position);
-                secretChosen = position;
+                List<Secret> secrets = thematics.get(position).getSecrets();
+                ArrayAdapter<Secret> adapter = new ArrayAdapter<Secret>(getActivity(), android.R.layout.simple_spinner_item, secrets);
+                thematicChosen = position;
+                secret.setAdapter(adapter);
             }
         });
-        secret.setAdapter(adapter);
-
+        thematic.setAdapter(thematicArrayAdapter);
 
 
         // Use the Builder class for convenient dialog construction
@@ -100,7 +92,7 @@ public class PartyDetailsDialog extends DialogFragment {
                     public void onClick(DialogInterface dialog, int id) {
                         String username = String.valueOf(((EditText) getDialog().findViewById(R.id.ET_username)).getText());
                         dismiss();
-                        mCallback.onPartyJoined(thematicPos, partyPos, username, secrets.get(secretChosen).getId());
+                       // mCallback.onPartyJoined(thematicPos, partyPos, username, secrets.get(secretChosen).getId());
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

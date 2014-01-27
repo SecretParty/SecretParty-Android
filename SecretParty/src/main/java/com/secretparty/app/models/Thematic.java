@@ -79,4 +79,9 @@ public class Thematic {
         c2 = getName().charAt(1);
         return (c1 + c2<<1) * getId() % 5;
     }
+
+    @Override
+    public String toString() {
+        return this.getName();
+    }
 }

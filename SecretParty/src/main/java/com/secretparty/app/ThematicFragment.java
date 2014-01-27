@@ -79,15 +79,6 @@ public class ThematicFragment extends Fragment {
         return rootView;
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-
-        super.onCreateOptionsMenu(menu, inflater);
-        setHasOptionsMenu(true);
-        inflater.inflate(R.menu.menu_add_party, menu);
-    }
-
-
 
         private static class ThematicAdapter extends BaseAdapter {
         private final List<Thematic> mThematics;

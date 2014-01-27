@@ -36,5 +36,8 @@
     <string name="SP_user_id">SP_user_id</string>
     <string name="SP_party_id">SP_party_id</string>
     <string name="action_add">Create a Party</string>
+    <string name="ask_party_name">What is your party name?</string>
+    <string name="ask_theme">Choose a thematic for your party</string>
+    <string name="ask_duration">Choose a duration</string>
 
 </resources>
