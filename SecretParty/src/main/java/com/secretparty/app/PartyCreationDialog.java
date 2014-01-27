@@ -35,6 +35,7 @@ import com.secretparty.app.models.Party;
 import com.secretparty.app.models.Secret;
 import com.secretparty.app.models.Thematic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -66,18 +67,25 @@ public class PartyCreationDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
        // final List<Secret> secrets = mCallback.getThematics().get(thematicPos).getSecrets();
         final List<Thematic> thematics = mCallback.getThematics();
-        View rootView = getDialog().getLayoutInflater().inflate(R.layout.join_party_layout, null);
+        View rootView = getActivity().getLayoutInflater().inflate(R.layout.party_creation_layout, null);
         final Spinner secret = (Spinner) rootView.findViewById(R.id.S_secrets);
-
         Spinner thematic = (Spinner) rootView.findViewById(R.id.S_theme);
-        ArrayAdapter<Thematic> thematicArrayAdapter = new ArrayAdapter<Thematic>(getActivity(),android.R.layout.simple_spinner_item, thematics);
+        ArrayAdapter<Thematic> thematicArrayAdapter = new ArrayAdapter<Thematic>(getActivity(),android.R.layout.simple_spinner_dropdown_item, thematics);
        // ArrayAdapter<Secret> adapter = new ArrayAdapter<Secret>(getActivity(), android.R.layout.simple_spinner_item, secrets);
-        thematic.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        thematic.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 List<Secret> secrets = thematics.get(position).getSecrets();
-                ArrayAdapter<Secret> adapter = new ArrayAdapter<Secret>(getActivity(), android.R.layout.simple_spinner_item, secrets);
+                ArrayAdapter<Secret> adapter = new ArrayAdapter<Secret>(getActivity(), android.R.layout.simple_spinner_dropdown_item, secrets);
                 thematicChosen = position;
+                secret.setAdapter(adapter);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                List<Secret> secrets = new ArrayList<Secret>();
+                ArrayAdapter<Secret> adapter=new ArrayAdapter<Secret>(getActivity(),android.R.layout.simple_spinner_dropdown_item,secrets);
+                thematicChosen = -1;
                 secret.setAdapter(adapter);
             }
         });
@@ -91,7 +99,12 @@ public class PartyCreationDialog extends DialogFragment {
                 .setPositiveButton(R.string.join, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         String username = String.valueOf(((EditText) getDialog().findViewById(R.id.ET_username)).getText());
+                        String partyName = String.valueOf(((EditText)getDialog().findViewById(R.id.ET_party_name)).getText());
+                        int duration = Integer.parseInt(String.valueOf(((EditText) getDialog().findViewById(R.id.ET_party_duration)).getText()));
+                        Thematic t = mCallback.getThematics().get(thematicChosen);
+                        Secret s = t.getSecrets().get(secretChosen);
                         dismiss();
+                        mCallback.onPartyCreated(t.getId(),s.getId(),partyName,duration);
                        // mCallback.onPartyJoined(thematicPos, partyPos, username, secrets.get(secretChosen).getId());
                     }
                 })

@@ -115,7 +115,7 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
 
     @Override
     public void onPartyJoined(int thematicPos, int partyPos, String username, int secretId) {
-        Log.d("OMG", "party joined");
+        Log.d("MainActivity", "party joined");
 
         UserJoinPartyASync join = new UserJoinPartyASync(getThematics().get(thematicPos).getCurrentParties().get(partyPos), username,secretId );
         join.execute();
@@ -129,14 +129,17 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
         transaction.replace(R.id.container, newFragment);
         transaction.addToBackStack(null);
         transaction.commit();*/
-
-
-
     }
 
     @Override
     public Party getParty() {
         return mCurrentParty;
+    }
+
+    @Override
+    public void onPartyCreated(int thematicId, int secretId, String partyName, int duration) {
+        Log.d("MainActivity", "Creation of the party");
+        //TODO
     }
 
     private void loadPartyFragment() {
@@ -222,5 +225,4 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
             loadPartyFragment();
         }
     }
-
 }
