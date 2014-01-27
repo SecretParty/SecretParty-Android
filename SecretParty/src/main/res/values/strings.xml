@@ -39,5 +39,7 @@
     <string name="ask_party_name">What is your party name?</string>
     <string name="ask_theme">Choose a thematic for your party</string>
     <string name="ask_duration">Choose a duration (in minutes)</string>
+    <string name="party_creation_cancel">Cancelling party creation...</string>
+    <string name="party_join_cancel">The party wasn\'t joined.</string>
 
 </resources>

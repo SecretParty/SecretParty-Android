@@ -30,6 +30,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.secretparty.app.models.Party;
 import com.secretparty.app.models.Secret;
@@ -43,13 +44,18 @@ import java.util.List;
  */
 public class PartyCreationDialog extends DialogFragment {
     private ThematicFragment.ThematicManager mCallback;
-    private int secretChosen = 0;
+    /**
+     * Position in the main thematic list of the thematic.
+     */
     private int thematicChosen = 0;
+    /**
+     * Position in the thematic's secret list of the secret chosen.
+     */
+    private int secretChosen = 0;
 
     static PartyCreationDialog newInstance() {
-        PartyCreationDialog f = new PartyCreationDialog();
 
-        return f;
+        return new PartyCreationDialog();
     }
 
     @Override
@@ -59,19 +65,18 @@ public class PartyCreationDialog extends DialogFragment {
             mCallback = (ThematicFragment.ThematicManager) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnHeadlineSelectedListener");
+                    + " must implement ThematicManager");
         }
     }
 
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-       // final List<Secret> secrets = mCallback.getThematics().get(thematicPos).getSecrets();
-        final List<Thematic> thematics = mCallback.getThematics();
         View rootView = getActivity().getLayoutInflater().inflate(R.layout.party_creation_layout, null);
+
+        final List<Thematic> thematics = mCallback.getThematics();
         final Spinner secret = (Spinner) rootView.findViewById(R.id.S_secrets);
         Spinner thematic = (Spinner) rootView.findViewById(R.id.S_theme);
         ArrayAdapter<Thematic> thematicArrayAdapter = new ArrayAdapter<Thematic>(getActivity(),android.R.layout.simple_spinner_dropdown_item, thematics);
-       // ArrayAdapter<Secret> adapter = new ArrayAdapter<Secret>(getActivity(), android.R.layout.simple_spinner_item, secrets);
         thematic.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
@@ -80,7 +85,6 @@ public class PartyCreationDialog extends DialogFragment {
                 thematicChosen = position;
                 secret.setAdapter(adapter);
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> adapterView) {
                 List<Secret> secrets = new ArrayList<Secret>();
@@ -90,7 +94,6 @@ public class PartyCreationDialog extends DialogFragment {
             }
         });
         thematic.setAdapter(thematicArrayAdapter);
-
 
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
@@ -105,12 +108,12 @@ public class PartyCreationDialog extends DialogFragment {
                         Secret s = t.getSecrets().get(secretChosen);
                         dismiss();
                         mCallback.onPartyCreated(t.getId(),s.getId(),partyName,duration);
-                       // mCallback.onPartyJoined(thematicPos, partyPos, username, secrets.get(secretChosen).getId());
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // TODO
+                        dismiss();
+                        Toast.makeText(getActivity(),R.string.party_creation_cancel,Toast.LENGTH_LONG).show();
                     }
                 });
         return builder.create();

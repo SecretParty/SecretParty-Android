@@ -35,6 +35,7 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.secretparty.app.models.Party;
 import com.secretparty.app.models.Secret;
@@ -46,6 +47,7 @@ import java.util.List;
  * Created by MagicMicky on 23/01/14.
  */
 public class PartyDetailsDialog extends DialogFragment {
+    private static final String TAG = "PartyDetailsDialog";
     private ThematicFragment.ThematicManager mCallback;
     private int secretChosen = 0;
 
@@ -68,19 +70,23 @@ public class PartyDetailsDialog extends DialogFragment {
             mCallback = (ThematicFragment.ThematicManager) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
-                    + " must implement OnHeadlineSelectedListener");
+                    + " must implement ThematicManager");
         }
     }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final int thematicPos = getArguments().getInt(ThematicDetailedFragment.THEMATIC_POS);
-        final int partyPos = getArguments().getInt(PartyFragment.PARTY_POS);
-        Party p = mCallback.getThematics().get(thematicPos).getCurrentParties().get(partyPos);
+        final int thematicPos = getArguments().getInt(ThematicDetailedFragment.THEMATIC_POS,-1);
+        final int partyPos = getArguments().getInt(PartyFragment.PARTY_POS, -1);
+        if(thematicPos==-1 || partyPos==-1) {
+            Log.e(TAG, "Error while giving the thematic or Party position");
+        }
+
         final List<Secret> secrets = mCallback.getThematics().get(thematicPos).getSecrets();
 
-        View rootView = getDialog().getLayoutInflater().inflate(R.layout.join_party_layout, null);
+        View rootView = getActivity().getLayoutInflater().inflate(R.layout.join_party_layout, null);
         Spinner secret = (Spinner) rootView.findViewById(R.id.S_secrets);
         ArrayAdapter<Secret> adapter = new ArrayAdapter<Secret>(getActivity(), android.R.layout.simple_spinner_item, secrets);
+
         secret.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
@@ -110,7 +116,8 @@ public class PartyDetailsDialog extends DialogFragment {
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        // TODO
+                        Toast.makeText(getActivity(),R.string.party_join_cancel,Toast.LENGTH_LONG).show();
+                        dismiss();
                     }
                 });
         return builder.create();
