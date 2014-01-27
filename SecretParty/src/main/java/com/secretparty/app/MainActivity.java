@@ -255,6 +255,11 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
         return mCurrentParty;
     }
 
+    @Override
+    public void onPartyCreated(int thematicId, int secretId, String partyName, int duration) {
+        //TODO: call the API with the correct syntax and args.
+    }
+
     private void loadPartyFragment() {
         loadPartyFragment(-1);
     }
