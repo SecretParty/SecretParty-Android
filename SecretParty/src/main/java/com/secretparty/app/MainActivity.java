@@ -282,7 +282,7 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
                 Map<String,String> params = new HashMap<String, String>();
 
                 params.put("party_user[party][name]",partyName);
-                params.put("party_user[party][length]",Integer.toString(duration));
+                params.put("party_user[party][length]",Integer.toString(duration*60));//duration min <-> sec
                 params.put("party_user[party][thematic]",Integer.toString(thematicId));
                 params.put("party_user[user][name]",username);
                 params.put("party_user[user][secret]",Integer.toString(secretId));
