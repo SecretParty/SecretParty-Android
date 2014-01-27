@@ -18,6 +18,7 @@
 
 package com.secretparty.app.models;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class Party {
     }
 
     public Party() {
-
+        this.users=new ArrayList<User>();
     }
 
     public int getId() {

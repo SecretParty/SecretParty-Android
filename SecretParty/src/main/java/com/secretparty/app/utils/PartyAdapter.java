@@ -26,7 +26,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by david on 26/01/2014.
@@ -39,13 +43,24 @@ public class PartyAdapter {
         s.setName(jsonParty.getString("name"));
         s.setLength(jsonParty.getInt("length"));
         s.setThematic(t);
+        String date = jsonParty.getString("date");
+        //2014-01-26T19:35:00+0100
+        //yyyy-MM-dd'T'HH:mm:ssZ
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 
+        try {
+            s.setDate(format.parse(date));
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         if(jsonParty.has("users")){
             JSONArray jsonUser = jsonParty.getJSONArray("users");
             ArrayList<User> listUser = new ArrayList<User>();
             for(int i=0 ; i<jsonUser.length() ; i++){
                 listUser.add(UserAdpater.parseUser((JSONObject) jsonUser.get(i)));
             }
+            s.setUsers(listUser);
         }
         return s;
     }
