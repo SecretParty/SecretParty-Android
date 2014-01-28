@@ -20,32 +20,35 @@ package com.secretparty.app;
 
 import android.app.Application;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.internal.bind.DateTypeAdapter;
+import com.secretparty.app.api.APIService;
+
+import java.util.Date;
+
+import retrofit.RestAdapter;
 
 /**
  * Created by david on 26/01/2014.
  */
 public class SecretPartyApplication extends Application {
 
-    private RequestQueue mVolleyRequestQueue;
+    private APIService apiService;
 
     @Override
     public void onCreate(){
         super.onCreate();
 
-        mVolleyRequestQueue = Volley.newRequestQueue(getApplicationContext());
-        mVolleyRequestQueue.start();
+        RestAdapter restAdapter = new RestAdapter.Builder()
+                .setServer(getString(R.string.server))
+                .build();
 
+        apiService = restAdapter.create(APIService.class);
     }
 
-    public RequestQueue getmVolleyRequestQueue() {
-        return mVolleyRequestQueue;
-    }
-
-    @Override
-    public void onTerminate(){
-        mVolleyRequestQueue.stop();
-        super.onTerminate();
+    public APIService getApiService() {
+        return apiService;
     }
 }

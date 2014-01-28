@@ -25,12 +25,10 @@ public class Secret {
     private int id;
     private String name;
     private String hint;
-    private Thematic thematic;
 
-    public Secret(int id, String name, String hint, Thematic thematic) {
+    public Secret(int id, String name, String hint) {
         this.setId(id);
         this.setHint(hint);
-        this.setThematic(thematic);
         this.setName(name);
     }
 
@@ -62,13 +60,6 @@ public class Secret {
         this.hint = hint;
     }
 
-    public Thematic getThematic() {
-        return thematic;
-    }
-
-    public void setThematic(Thematic thematic) {
-        this.thematic = thematic;
-    }
     @Override
     public String toString() {
         return this.getName();

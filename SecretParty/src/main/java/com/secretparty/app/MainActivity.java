@@ -28,45 +28,31 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
+import com.secretparty.app.api.APIService;
 import com.secretparty.app.models.Party;
 import com.secretparty.app.models.Thematic;
 import com.secretparty.app.models.User;
-import com.secretparty.app.utils.CustomJsonObjectRequest;
-import com.secretparty.app.utils.PartyAdapter;
-import com.secretparty.app.utils.ThematicAdpater;
-import com.secretparty.app.utils.UserAdpater;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+
+import retrofit.Callback;
+import retrofit.RetrofitError;
+import retrofit.client.Response;
 
 public class MainActivity extends ActionBarActivity implements ThematicFragment.ThematicManager {
 
     private ArrayList<Thematic> thematics = new ArrayList<Thematic>();
-    private Party mCurrentParty=null;
-    private RequestQueue mRequestQueue;
+    private Party mCurrentParty = null;
+    private APIService api;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Init volley queue
-        SecretPartyApplication app = (SecretPartyApplication) getApplication();
-        mRequestQueue = app.getmVolleyRequestQueue();
+        api = ((SecretPartyApplication) getApplication()).getApiService();
 
         if (savedInstanceState == null) {
             SharedPreferences prefs = this.getPreferences(MODE_PRIVATE);
@@ -74,73 +60,18 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
             int partyId = prefs.getInt(getString(R.string.SP_party_id), -1);
             long partyEnd = prefs.getLong(getString(R.string.SP_date_party_end), -1);
 
-            if(new Date().compareTo(new Date(partyEnd)) < 0) {
-                // Send request Volley getThematics
-                JsonObjectRequest request = new JsonObjectRequest(getString(R.string.server)+"party/"+partyId,null,
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject jsonObject) {
-                                try {
-                                    Log.d("Call API", "GET party/id");
-                                    mCurrentParty = PartyAdapter.parseParty(jsonObject);
-                                    getSupportFragmentManager().beginTransaction()
-                                            .add(R.id.container, new ThematicFragment())
-                                            .commit();
-                                } catch (JSONException e) {
-                                    Log.d("Call API", "ERROR GET party/id : "+e.getMessage());
-                                }
-                            }
-                        }, new Response.ErrorListener(){
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        Log.d("Call API", "ERROR GET party/id : "+volleyError.getMessage());
-                    }
-                });
-                request.setTag(this);
-
-                // Add request in queue
-                mRequestQueue.add(request);
-            }
-            else {
-                // Send request Volley getThematics
-                JsonArrayRequest request = new JsonArrayRequest(getString(R.string.server)+"thematics",
-                        new Response.Listener<JSONArray>() {
-                            @Override
-                            public void onResponse(JSONArray jsonArray) {
-                                Log.d("Call API", "GET thematics");
-                                try {
-                                    thematics = ThematicAdpater.getThematics(jsonArray);
-                                    getSupportFragmentManager().beginTransaction()
-                                            .add(R.id.container, new ThematicFragment())
-                                            .commit();
-                                } catch (JSONException e) {
-                                    Log.d("Call API", "ERROR GET thematics : "+e.getMessage());
-                                }
-                            }
-                        }, new Response.ErrorListener(){
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        Log.d("Call API", "ERROR GET thematics : "+volleyError.getMessage());
-                    }
-                });
-                request.setTag(this);
-
-                // Add request in queue
-                mRequestQueue.add(request);
+            if (new Date().compareTo(new Date(partyEnd)) < 0) {
+                // Send request getParty
+                api.getParty(partyId, new OnRecievedParty());
+            } else {
+                // Send request getThematics
+                api.listThematics(new OnRecievedThematics());
             }
         }
-
-    }
-
-    @Override
-    protected void onStop(){
-        mRequestQueue.cancelAll(this);
-        super.onStop();
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_add_party, menu);
         return true;
@@ -157,7 +88,7 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
             case R.id.action_add:
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 Fragment prev = getSupportFragmentManager().findFragmentByTag("Dialog");
-                if(prev != null)
+                if (prev != null)
                     ft.remove(prev);
                 ft.addToBackStack(null);
                 DialogFragment frag = PartyCreationDialog.newInstance();
@@ -187,56 +118,11 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
     }
 
     @Override
-    public void onPartyJoined(final int thematicPos,final int partyPos, final String username,final int secretId) {
+    public void onPartyJoined(final int thematicPos, final int partyPos, final String username, final int secretId) {
         Log.d("OMG", "party joined");
-        final Party party = getThematics().get(thematicPos).getCurrentParties().get(partyPos);
+        // Send request for join party
+        api.joinParty(username,secretId,getThematics().get(thematicPos).getParties().get(partyPos).getId(),new onPartyJoin());
 
-        // Send request Volley join party
-        CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.POST,getString(R.string.server)+"user",
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject jsonObject) {
-                        try {
-                            Log.d("Call API", "POST user");
-                            User user = UserAdpater.parseUser(jsonObject);
-                            party.getUsers().add(user);
-                            SharedPreferences prefs = getPreferences(MODE_PRIVATE);
-
-                            Date end = new Date(party.getDate().getTime() + party.getLength());
-
-                            //Save the info about the user and his in the SharedPreferences.
-                            prefs.edit()
-                                    .putInt(getString(R.string.SP_user_id), user.getId())
-                                    .putLong(getString(R.string.SP_date_party_end),end.getTime() )
-                                    .putInt(getString(R.string.SP_party_id), party.getId())
-                                    .commit();
-                            MainActivity.this.mCurrentParty = party;
-                            loadPartyFragment();
-                        } catch (JSONException e) {
-                            Log.d("Call API", "ERROR POST user : "+e.getMessage());
-                        }
-                    }
-                }, new Response.ErrorListener(){
-                    @Override
-                    public void onErrorResponse(VolleyError volleyError) {
-                        Log.d("Call API", "ERROR POST user : "+volleyError.getMessage());
-                    }
-                }) {
-            @Override
-            protected Map<String,String> getParams() throws AuthFailureError{
-                Map<String,String> params = new HashMap<String, String>();
-
-                params.put("user[name]",username);
-                params.put("user[secret]",Integer.toString(secretId));
-                params.put("user[party]",Integer.toString(party.getId()));
-
-                return params;
-             }
-        };
-        request.setTag(this);
-
-        // Add request in queue
-        mRequestQueue.add(request);
 
        /* //Change Fragment
         PartyFragment newFragment = new PartyFragment();
@@ -258,50 +144,17 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
 
     @Override
     public void onPartyCreated(final int thematicId, final int secretId, final String partyName, final int duration, final String username) {
-        // Send request Volley join party
-        CustomJsonObjectRequest request = new CustomJsonObjectRequest(Request.Method.POST,getString(R.string.server)+"party",
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject jsonObject) {
-                        Log.d("Call API", "POST party");
-                        try {
-                            mCurrentParty = PartyAdapter.parseParty(jsonObject);
-                        } catch (JSONException e) {
-                            Log.d("Call API", "ERROR POST party : " + e.getMessage());
-                        }
-                    }
-                }, new Response.ErrorListener(){
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                Log.d("Call API", "ERROR POST party : "+ volleyError.networkResponse.headers);
-
-            }
-        }) {
-            @Override
-            protected Map<String,String> getParams(){
-                Map<String,String> params = new HashMap<String, String>();
-
-                params.put("party_user[party][name]",partyName);
-                params.put("party_user[party][length]",Integer.toString(duration*60));//duration min <-> sec
-                params.put("party_user[party][thematic]",Integer.toString(thematicId));
-                params.put("party_user[user][name]",username);
-                params.put("party_user[user][secret]",Integer.toString(secretId));
-
-                return params;
-            }
-        };
-        request.setTag(this);
-        System.out.println(request.getBodyContentType());
-        // Add request in queue
-        mRequestQueue.add(request);
+        // Send request create party
+        api.createParty(partyName,duration,thematicId,username,secretId,new OnCreatedParty());
     }
 
     private void loadPartyFragment() {
         loadPartyFragment(-1);
     }
+
     private void loadPartyFragment(int pos) {
         PartyFragment newFragment = new PartyFragment();
-        if(pos!=-1) {
+        if (pos != -1) {
             Bundle args = new Bundle();
             args.putInt(ThematicDetailedFragment.THEMATIC_POS, pos);
             newFragment.setArguments(args);
@@ -314,4 +167,66 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
         transaction.commit();
     }
 
+    private class OnRecievedThematics implements Callback<ArrayList<Thematic>> {
+
+        @Override
+        public void success(ArrayList<Thematic> thematics, Response response) {
+            Log.i("API", "OK request getThematics");
+            MainActivity.this.thematics = thematics;
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, new ThematicFragment())
+                    .commit();
+        }
+
+        @Override
+        public void failure(RetrofitError retrofitError) {
+            Log.i("API", "FAIL request getThematics : " + retrofitError.getMessage());
+            //TODO message d'erreur
+        }
+    }
+
+    private class OnRecievedParty implements Callback<Party> {
+        @Override
+        public void success(Party party, Response response) {
+            Log.i("API", "OK request getParty");
+            MainActivity.this.mCurrentParty = party;
+            getSupportFragmentManager().beginTransaction()
+                    .add(R.id.container, new ThematicFragment())
+                    .commit();
+        }
+
+        @Override
+        public void failure(RetrofitError retrofitError) {
+            Log.i("API", "FAIL request getParty : " + retrofitError.getMessage());
+            //TODO message d'erreur
+        }
+    }
+
+    private class onPartyJoin implements Callback<User> {
+        @Override
+        public void success(User user, Response response) {
+            Log.i("API", "OK request joinParty");
+            MainActivity.this.mCurrentParty = user.getParty();
+            //TODO action post join party
+        }
+
+        @Override
+        public void failure(RetrofitError retrofitError) {
+            Log.i("API", "FAIL request joinParty : " + retrofitError.getMessage());
+        }
+    }
+
+    private class OnCreatedParty implements Callback<Party> {
+        @Override
+        public void success(Party party, Response response) {
+            Log.i("API", "OK request createdParty");
+            MainActivity.this.mCurrentParty = party;
+            //TODO action post created party
+        }
+
+        @Override
+        public void failure(RetrofitError retrofitError) {
+            Log.i("API", "FAIL request createdParty : " + retrofitError.getMessage());
+        }
+    }
 }

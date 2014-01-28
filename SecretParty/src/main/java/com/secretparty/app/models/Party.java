@@ -18,6 +18,7 @@
 
 package com.secretparty.app.models;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +29,7 @@ import java.util.List;
 public class Party {
     private int id;
     private String name;
-    private Date date;
+    private Timestamp timestamp;
     private int length;
     private List<User> users;
     private Thematic thematic;
@@ -39,7 +40,6 @@ public class Party {
         this.setUsers(users);
         this.setDate(date);
         this.setLength(length);
-        this.setThematic(thematic);
     }
 
     public Party() {
@@ -79,11 +79,11 @@ public class Party {
     }
 
     public Date getDate() {
-        return date;
+        return new Date(timestamp.getTime());
     }
 
     public void setDate(Date date) {
-        this.date = date;
+        this.timestamp = new Timestamp(date.getTime());
     }
 
     public Thematic getThematic() {
@@ -97,4 +97,13 @@ public class Party {
     public boolean isPlaying() {
         return this.getDate() != null;
     }
+
+    public Timestamp getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Timestamp timestamp) {
+        this.timestamp = timestamp;
+    }
+
 }

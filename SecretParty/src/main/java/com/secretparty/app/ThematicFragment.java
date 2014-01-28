@@ -23,8 +23,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -123,7 +121,7 @@ public class ThematicFragment extends Fragment {
             initial.setText(""+t.getName().charAt(0));
             initial.setBackgroundColor(mContext.getResources().getIntArray(R.array.pic_color)[t.getColor()]);
             thematicText.setText(t.getName());
-            thematicNb.setText(""+t.getCurrentParties().size());
+            thematicNb.setText(""+t.getParties().size());
             return convertView;
         }
     }

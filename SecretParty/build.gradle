@@ -26,5 +26,5 @@ dependencies {
     compile 'com.android.support:support-v4:19.0.0'
     compile 'com.android.support:appcompat-v7:19.0.0'
     compile 'com.github.johnkil.android-robototextview:robototextview:2.0.0'
-    compile files('../libs/volley.jar')
+    compile 'com.squareup.retrofit:retrofit:1.0.1'
 }

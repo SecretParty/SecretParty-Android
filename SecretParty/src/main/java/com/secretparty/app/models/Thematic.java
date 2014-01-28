@@ -27,13 +27,13 @@ import java.util.List;
 public class Thematic {
     private int id;
     private String name;
-    private List<Party> currentParties = new ArrayList<Party>();
+    private List<Party> parties = new ArrayList<Party>();
     private List<Secret> secrets= new ArrayList<Secret>();
 
     public Thematic(int id, String name, List<Party> parties, List<Secret> secrets) {
         this.setId(id);
         this.setName(name);
-        this.setCurrentParties(parties);
+        this.setParties(parties);
         this.setSecrets(secrets);
     }
 
@@ -57,12 +57,12 @@ public class Thematic {
         this.name = name;
     }
 
-    public List<Party> getCurrentParties() {
-        return currentParties;
+    public List<Party> getParties() {
+        return parties;
     }
 
-    public void setCurrentParties(List<Party> currentParties) {
-        this.currentParties = currentParties;
+    public void setParties(List<Party> parties) {
+        this.parties = parties;
     }
 
     public List<Secret> getSecrets() {

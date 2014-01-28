@@ -64,7 +64,7 @@ public class ThematicDetailedFragment extends Fragment {
         ListView party_list = (ListView) rootView.findViewById(R.id.list);
 
 
-        PartyAdapter adapter = new PartyAdapter(this.getActivity(), mCallback.getThematics().get(thematicPos).getCurrentParties());
+        PartyAdapter adapter = new PartyAdapter(this.getActivity(), mCallback.getThematics().get(thematicPos).getParties());
         party_list.setAdapter(adapter);
         party_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
