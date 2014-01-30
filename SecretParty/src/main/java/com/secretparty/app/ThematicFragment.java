@@ -41,22 +41,15 @@ import java.util.List;
  * Created by MagicMicky on 23/01/14.
  */
 public class ThematicFragment extends Fragment {
-    private ThematicManager mCallback;
+    private FragmentEvent.ThematicSelectedListener mCallback;
 
-    public interface ThematicManager {
-        public void onThematicSelected(int pos);
-        public List<Thematic> getThematics();
-        public void onPartyJoined(int thematicPos, int partyPos, String username, int secretId);
-        public Party getParty();
 
-        void onPartyCreated(int thematicId, int secretId, String partyName, int duration, String username);
-    }
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mCallback = (ThematicManager) activity;
+            mCallback = (FragmentEvent.ThematicSelectedListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnHeadlineSelectedListener");

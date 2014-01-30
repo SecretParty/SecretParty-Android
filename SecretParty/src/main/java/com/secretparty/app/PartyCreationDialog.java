@@ -43,7 +43,7 @@ import java.util.List;
  * Created by MagicMicky on 24/01/14.
  */
 public class PartyCreationDialog extends DialogFragment {
-    private ThematicFragment.ThematicManager mCallback;
+    private FragmentEvent.PartyCreatedListener mCallback;
     /**
      * Position in the main thematic list of the thematic.
      */
@@ -62,7 +62,7 @@ public class PartyCreationDialog extends DialogFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mCallback = (ThematicFragment.ThematicManager) activity;
+            mCallback = (FragmentEvent.PartyCreatedListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement ThematicManager");

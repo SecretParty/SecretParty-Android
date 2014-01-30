@@ -48,7 +48,7 @@ import java.util.List;
  */
 public class PartyDetailsDialog extends DialogFragment {
     private static final String TAG = "PartyDetailsDialog";
-    private ThematicFragment.ThematicManager mCallback;
+    private FragmentEvent.PartySelectedListener mCallback;
     private int secretChosen = 0;
 
     static PartyDetailsDialog newInstance(int thematicPos, int partyPos) {
@@ -67,7 +67,7 @@ public class PartyDetailsDialog extends DialogFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mCallback = (ThematicFragment.ThematicManager) activity;
+            mCallback = (FragmentEvent.PartySelectedListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement ThematicManager");

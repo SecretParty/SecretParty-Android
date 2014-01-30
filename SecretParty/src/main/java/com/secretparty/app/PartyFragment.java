@@ -44,13 +44,13 @@ import java.util.List;
 public class PartyFragment extends Fragment {
     public static final String PARTY_POS = "PARTY_POS";
 
-    private ThematicFragment.ThematicManager mCallback;
+    private FragmentEvent.BuzzListener mCallback;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mCallback = (ThematicFragment.ThematicManager) activity;
+            mCallback = (FragmentEvent.BuzzListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnHeadlineSelectedListener");

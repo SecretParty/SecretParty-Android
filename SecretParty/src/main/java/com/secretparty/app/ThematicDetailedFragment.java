@@ -41,13 +41,13 @@ import java.util.List;
  */
 public class ThematicDetailedFragment extends Fragment {
     public static final String THEMATIC_POS = "THEMATIC_POS";
-    private ThematicFragment.ThematicManager mCallback;
+    private FragmentEvent mCallback;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mCallback = (ThematicFragment.ThematicManager) activity;
+            mCallback = (FragmentEvent) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnHeadlineSelectedListener");

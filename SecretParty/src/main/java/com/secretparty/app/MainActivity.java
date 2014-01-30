@@ -41,7 +41,9 @@ import retrofit.Callback;
 import retrofit.RetrofitError;
 import retrofit.client.Response;
 
-public class MainActivity extends ActionBarActivity implements ThematicFragment.ThematicManager {
+public class MainActivity extends ActionBarActivity implements FragmentEvent.ThematicSelectedListener,
+        FragmentEvent.PartyCreatedListener,
+        FragmentEvent.PartySelectedListener, FragmentEvent.BuzzListener {
 
     private ArrayList<Thematic> thematics = new ArrayList<Thematic>();
     private Party mCurrentParty = null;
@@ -62,10 +64,10 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
 
             if (new Date().compareTo(new Date(partyEnd)) < 0) {
                 // Send request getParty
-                api.getParty(partyId, new OnRecievedParty());
+                api.getParty(partyId, new OnReceivedParty());
             } else {
                 // Send request getThematics
-                api.listThematics(new OnRecievedThematics());
+                api.listThematics(new OnReceivedThematics());
             }
         }
     }
@@ -100,6 +102,17 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
     }
 
     @Override
+    public void onBuzzPlayer(User buzer, User buzee) {
+        //TODO:
+    }
+
+    @Override
+    public Party getParty() {
+        return mCurrentParty;
+    }
+
+
+    @Override
     public void onThematicSelected(int pos) {
         ThematicDetailedFragment newFragment = new ThematicDetailedFragment();
         Bundle args = new Bundle();
@@ -119,27 +132,8 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
 
     @Override
     public void onPartyJoined(final int thematicPos, final int partyPos, final String username, final int secretId) {
-        Log.d("OMG", "party joined");
         // Send request for join party
         api.joinParty(username,secretId,getThematics().get(thematicPos).getParties().get(partyPos).getId(),new onPartyJoin());
-
-
-       /* //Change Fragment
-        PartyFragment newFragment = new PartyFragment();
-        Bundle args = new Bundle();
-        args.putInt(ThematicDetailedFragment.THEMATIC_POS, pos);
-        newFragment.setArguments(args);
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.container, newFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();*/
-
-    }
-
-    @Override
-    public Party getParty() {
-        return mCurrentParty;
     }
 
     @Override
@@ -167,7 +161,7 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
         transaction.commit();
     }
 
-    private class OnRecievedThematics implements Callback<ArrayList<Thematic>> {
+    private class OnReceivedThematics implements Callback<ArrayList<Thematic>> {
 
         @Override
         public void success(ArrayList<Thematic> thematics, Response response) {
@@ -185,13 +179,13 @@ public class MainActivity extends ActionBarActivity implements ThematicFragment.
         }
     }
 
-    private class OnRecievedParty implements Callback<Party> {
+    private class OnReceivedParty implements Callback<Party> {
         @Override
         public void success(Party party, Response response) {
             Log.i("API", "OK request getParty");
             MainActivity.this.mCurrentParty = party;
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.container, new ThematicFragment())
+                    .replace(R.id.container, new ThematicFragment())
                     .commit();
         }
 
