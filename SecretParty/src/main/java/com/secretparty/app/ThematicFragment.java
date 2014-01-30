@@ -61,12 +61,12 @@ public class ThematicFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.listview_fragment, container, false);
         ListView thematic_list = (ListView) rootView.findViewById(R.id.list);
-        ListAdapter mAdapter = new ThematicAdapter(this.getActivity(), mCallback.getThematics());
+        ListAdapter mAdapter = new ThematicAdapter(this.getActivity(), mCallback.getThematicRepository().getAll());
         thematic_list.setAdapter(mAdapter);
         thematic_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
-                mCallback.onThematicSelected(pos);
+                mCallback.onThematicSelected((int) id);
             }
         });
         return rootView;

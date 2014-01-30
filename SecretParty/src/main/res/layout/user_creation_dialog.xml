@@ -22,15 +22,14 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
     <TextView
-        android:id="@+id/TV_secret"
+        android:id="@+id/TV_user_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ask_secret"
-        android:textSize="@dimen/textSize_medium"
-        android:padding="5dp"/>
-    <Spinner
-        android:id="@+id/S_secrets"
-        android:layout_below="@id/TV_secret"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        android:text="@string/ask_username"
+        style="@style/AppTheme.dialogQuestion"/>
+    <EditText
+        android:id="@+id/ET_username"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/TV_user_name"/>
 </RelativeLayout>

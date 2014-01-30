@@ -16,47 +16,30 @@
  *     along with this program.  If not, see [http://www.gnu.org/licenses/].
  */
 
-package com.secretparty.app.models;
+package com.secretparty.app.db;
+
+import android.content.Context;
+
+import com.j256.ormlite.android.apptools.OpenHelperManager;
 
 /**
- * Created by MagicMicky on 22/01/14.
+ * Created by MagicMicky on 30/01/14.
  */
-public class User {
-    private int id;
-    private String name;
-    private Party party;
-
-    public User(int id, String name, Party p) {
-        this.setId(id);
-        this.setName(name);
-        this.setParty(p);
+public class DatabaseManager {
+    private DatabaseHelper dbHelper = null;
+    public DatabaseHelper getDbHelper(Context context) {
+        if (dbHelper == null) {
+            dbHelper =
+                    OpenHelperManager.getHelper(context, DatabaseHelper.class);
+        }
+        return dbHelper;
     }
 
-    public User() {
-
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Party getParty() {
-        return party;
-    }
-
-    public void setParty(Party party) {
-        this.party = party;
+    public void releaseHelper(DatabaseHelper helper)
+    {
+        if (dbHelper != null) {
+            OpenHelperManager.releaseHelper();
+            dbHelper = null;
+        }
     }
 }

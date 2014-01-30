@@ -18,14 +18,23 @@
 
 package com.secretparty.app.models;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 /**
  * Created by MagicMicky on 22/01/14.
  */
+@DatabaseTable
 public class Secret {
+    @DatabaseField(id = true)
     private int id;
+    @DatabaseField
     private String name;
+    @DatabaseField
     private String hint;
 
+    @DatabaseField(foreign = true)
+    private Thematic thematic;
     public Secret(int id, String name, String hint) {
         this.setId(id);
         this.setHint(hint);
@@ -63,5 +72,13 @@ public class Secret {
     @Override
     public String toString() {
         return this.getName();
+    }
+
+    public void setThematic(Thematic thematic) {
+        this.thematic = thematic;
+    }
+
+    public Thematic getThematic() {
+        return thematic;
     }
 }

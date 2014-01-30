@@ -18,6 +18,7 @@
 
 package com.secretparty.app;
 
+import com.secretparty.app.db.ThematicRepository;
 import com.secretparty.app.models.Party;
 import com.secretparty.app.models.Thematic;
 import com.secretparty.app.models.User;
@@ -29,25 +30,25 @@ import java.util.List;
  */
 public interface FragmentEvent {
 
-    List<Thematic> getThematics();
+    //List<Thematic> getThematics();
+    ThematicRepository getThematicRepository();
+    List<Party> getPartiesShown();
 
     public interface ThematicSelectedListener extends FragmentEvent{
         /**
          * When a thematic is selected
-         * @param pos the position of the Thematic selected. TODO : no more pos
+         * @param thematicId the id of the thematic selected
          */
-        public void onThematicSelected(int pos);
+        public void onThematicSelected(int thematicId);
     }
 
     public interface PartySelectedListener extends FragmentEvent {
         /**
          * When a party is joined
-         * @param thematicPos The position of the Thematic in the main getThematics TODO : no more pos
-         * @param partyPos The position of the Party in the thematic TODO no more pos
-         * @param username the name of the player
+         * @param partyId The id of the chosen party
          * @param secretId The secret if of the player
          */
-        public void onPartyJoined(final int thematicPos, final int partyPos, final String username, final int secretId);
+        public void onPartyJoined(final int partyId, final int secretId);
     }
 
     public interface PartyCreatedListener extends FragmentEvent {
@@ -57,9 +58,8 @@ public interface FragmentEvent {
          * @param secretId The ID of the secret of the player
          * @param partyName The name of the party
          * @param duration The duration of the party
-         * @param username The name of the first player
          */
-        public void onPartyCreated(final int thematicId, final int secretId, final String partyName, final int duration, final String username);
+        public void onPartyCreated(final int thematicId, final int secretId, final String partyName, final int duration);
     }
 
     public interface BuzzListener extends FragmentEvent {
@@ -77,4 +77,7 @@ public interface FragmentEvent {
         public Party getParty();
         }
 
+    public interface UserCreationListener  extends FragmentEvent {
+        void onUserCreated(String name);
+    }
 }

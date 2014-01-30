@@ -30,7 +30,7 @@
     <string name="cancel">Cancel</string>
     <string name="join">Join</string>
     <string name="ask_username">Type in your username</string>
-    <string name="ask_secret">Choose a secret</string>
+    <string name="ask_secret">Choose your secret</string>
     <string name="remainingTime">%1$d:%2$d</string>
     <string name="SP_date_party_end">SP_date_party_end</string>
     <string name="SP_user_id">SP_user_id</string>
@@ -45,5 +45,9 @@
     <string name="PartyLoadingFailed">Unable to join a party</string>
     <string name="PartyJoiningFail">Unable to join a party</string>
     <string name="PartyCreationFail">Party creation failed</string>
+    <string name="user_creation_required">You need to input your username first</string>
+    <string name="user_created">User created successfuly</string>
+    <string name="user_creation_failed">Failed creating a new user...</string>
+    <string name="parties_listing_failes">Failed listing the parties.</string>
 
 </resources>

@@ -73,7 +73,7 @@ public class PartyCreationDialog extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         View rootView = getActivity().getLayoutInflater().inflate(R.layout.party_creation_layout, null);
 
-        final List<Thematic> thematics = mCallback.getThematics();
+        final List<Thematic> thematics = mCallback.getThematicRepository().getAll();
         final Spinner secret = (Spinner) rootView.findViewById(R.id.S_secrets);
         Spinner thematic = (Spinner) rootView.findViewById(R.id.S_theme);
         ArrayAdapter<Thematic> thematicArrayAdapter = new ArrayAdapter<Thematic>(getActivity(),android.R.layout.simple_spinner_dropdown_item, thematics);
@@ -81,6 +81,9 @@ public class PartyCreationDialog extends DialogFragment {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
                 List<Secret> secrets = thematics.get(position).getSecrets();
+                if(secrets.size()==0) {
+                    Log.w("OMG", "secrets are 00");
+                }
                 ArrayAdapter<Secret> adapter = new ArrayAdapter<Secret>(getActivity(), android.R.layout.simple_spinner_dropdown_item, secrets);
                 thematicChosen = position;
                 secret.setAdapter(adapter);
@@ -101,13 +104,12 @@ public class PartyCreationDialog extends DialogFragment {
                 .setTitle(R.string.party_join_dialog)
                 .setPositiveButton(R.string.join, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        String username = String.valueOf(((EditText) getDialog().findViewById(R.id.ET_username)).getText());
                         String partyName = String.valueOf(((EditText)getDialog().findViewById(R.id.ET_party_name)).getText());
                         int duration = Integer.parseInt(String.valueOf(((EditText) getDialog().findViewById(R.id.ET_party_duration)).getText()));
-                        Thematic t = mCallback.getThematics().get(thematicChosen);
+                        Thematic t = thematics.get(thematicChosen);
                         Secret s = t.getSecrets().get(secretChosen);
                         dismiss();
-                        mCallback.onPartyCreated(t.getId(),s.getId(),partyName,duration, username);
+                        mCallback.onPartyCreated(t.getId(),s.getId(),partyName,duration);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

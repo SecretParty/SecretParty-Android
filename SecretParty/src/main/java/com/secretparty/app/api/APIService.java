@@ -30,28 +30,42 @@ import retrofit.http.FormUrlEncoded;
 import retrofit.http.GET;
 import retrofit.http.POST;
 import retrofit.http.Path;
+import retrofit.http.Query;
 
 /**
  * Created by david on 28/01/2014.
  */
 public interface APIService {
+    @FormUrlEncoded
+    @POST("/user")
+    void createUser(@Field("user[name]") String username, Callback<User> userCallback);
+
+    @GET("/user/{id}")
+    void getUser(@Path("id") int id, Callback<User> userCallback);
+
     @GET("/thematics")
     void listThematics(Callback<ArrayList<Thematic>> thematicCallback);
-
-    @GET("/party/{id}")
-    void getParty(@Path("id") int id,Callback<Party> partyCallback);
 
     @FormUrlEncoded
     @POST("/party")
     void createParty(@Field("party_user[party][name]") String partyName,
-                      @Field("party_user[party][length]") Integer length,
-                      @Field("party_user[party][thematic]") Integer idThematic,
-                      @Field("party_user[user][name]") String userName,
-                      @Field("party_user[user][secret]") Integer idSecret, Callback<Party> partyCallback);
+                     @Field("party_user[party][length]") Integer length,
+                     @Field("party_user[party][thematic]") Integer idThematic,
+                     @Field("party_user[user][id]") Integer userId,
+                     @Field("party_user[user][secret]") Integer idSecret, Callback<Party> partyCallback);
+
+
+
+    @GET("/party/{id}")
+    void getParty(@Path("id") int id,Callback<Party> partyCallback);
+
+    @GET("/parties")
+    void getParties(@Query("thematic") int id, Callback<ArrayList<Party>> partiesCallback);
 
     @FormUrlEncoded
-    @POST("/user")
-    void joinParty(@Field("user[name]") String name,
+    @POST("/party/{id}/join")
+    void    joinParty(@Path("id") Integer partyId,
+                   @Field("user[id]") Integer userId,
                    @Field("user[secret]") Integer idSecret,
-                   @Field("user[party]") Integer idParty, Callback<User> userCallback);
+                   Callback<Party> partyCallback);
 }

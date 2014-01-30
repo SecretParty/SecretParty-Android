@@ -38,10 +38,11 @@
         android:id="@id/BTN_buzz"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="?android:borderlessButtonStyle"
         android:layout_alignParentRight="true"
         android:src="@android:drawable/ic_menu_send"
         android:lines="1"
         android:ellipsize="end"
         />
+    <!--  style="?android:borderlessButtonStyle"-->
+
 </RelativeLayout>

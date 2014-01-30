@@ -21,25 +21,17 @@ package com.secretparty.app;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.secretparty.app.models.Party;
 import com.secretparty.app.models.Secret;
-import com.secretparty.app.models.User;
 
 import java.util.List;
 
@@ -57,7 +49,7 @@ public class PartyDetailsDialog extends DialogFragment {
         // Supply num input as an argument.
         Bundle args = new Bundle();
         args.putInt(PartyFragment.PARTY_POS, partyPos);
-        args.putInt(ThematicDetailedFragment.THEMATIC_POS, thematicPos);
+        args.putInt(ThematicDetailedFragment.THEMATIC_ID, thematicPos);
         f.setArguments(args);
 
         return f;
@@ -75,13 +67,13 @@ public class PartyDetailsDialog extends DialogFragment {
     }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        final int thematicPos = getArguments().getInt(ThematicDetailedFragment.THEMATIC_POS,-1);
-        final int partyPos = getArguments().getInt(PartyFragment.PARTY_POS, -1);
-        if(thematicPos==-1 || partyPos==-1) {
+        final int thematicId = getArguments().getInt(ThematicDetailedFragment.THEMATIC_ID,-1);
+        final int partyId = getArguments().getInt(MainActivity.PARTY_ID, -1);
+        if(thematicId==-1 || partyId==-1) {
             Log.e(TAG, "Error while giving the thematic or Party position");
         }
-
-        final List<Secret> secrets = mCallback.getThematics().get(thematicPos).getSecrets();
+        //TODO : stop using freaking positions
+        final List<Secret> secrets = mCallback.getThematicRepository().get(thematicId).getSecrets();
 
         View rootView = getActivity().getLayoutInflater().inflate(R.layout.join_party_layout, null);
         Spinner secret = (Spinner) rootView.findViewById(R.id.S_secrets);
@@ -109,9 +101,8 @@ public class PartyDetailsDialog extends DialogFragment {
                 .setTitle(R.string.party_join_dialog)
                 .setPositiveButton(R.string.join, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        String username = String.valueOf(((EditText) getDialog().findViewById(R.id.ET_username)).getText());
                         dismiss();
-                        mCallback.onPartyJoined(thematicPos, partyPos, username, secrets.get(secretChosen).getId());
+                        mCallback.onPartyJoined(partyId, secrets.get(secretChosen).getId());
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

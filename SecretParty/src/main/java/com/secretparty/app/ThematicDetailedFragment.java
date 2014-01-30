@@ -40,7 +40,7 @@ import java.util.List;
  * Created by MagicMicky on 23/01/14.
  */
 public class ThematicDetailedFragment extends Fragment {
-    public static final String THEMATIC_POS = "THEMATIC_POS";
+    public static final String THEMATIC_ID = "THEMATIC_ID";
     private FragmentEvent mCallback;
 
     @Override
@@ -58,23 +58,22 @@ public class ThematicDetailedFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        final int thematicPos = getArguments().getInt(THEMATIC_POS);
 
         View rootView = inflater.inflate(R.layout.listview_fragment, container, false);
         ListView party_list = (ListView) rootView.findViewById(R.id.list);
 
 
-        PartyAdapter adapter = new PartyAdapter(this.getActivity(), mCallback.getThematics().get(thematicPos).getParties());
+        PartyAdapter adapter = new PartyAdapter(this.getActivity(), mCallback.getPartiesShown());
         party_list.setAdapter(adapter);
         party_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long id) {
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 Fragment prev = getFragmentManager().findFragmentByTag("Dialog");
                 if(prev != null)
                     ft.remove(prev);
                 ft.addToBackStack(null);
-                DialogFragment frag = PartyDetailsDialog.newInstance(thematicPos, i);
+                DialogFragment frag = PartyDetailsDialog.newInstance((int)id, i);
                 frag.show(ft, "dialog");
             }
         });

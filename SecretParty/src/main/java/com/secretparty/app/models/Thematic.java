@@ -18,17 +18,27 @@
 
 package com.secretparty.app.models;
 
+
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.field.ForeignCollectionField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
  * Created by MagicMicky on 22/01/14.
  */
+@DatabaseTable()
 public class Thematic {
+    @DatabaseField(id = true)
     private int id;
+    @DatabaseField
     private String name;
     private List<Party> parties = new ArrayList<Party>();
-    private List<Secret> secrets= new ArrayList<Secret>();
+    @ForeignCollectionField(eager = true)
+    private Collection<Secret> secrets= new ArrayList<Secret>();
 
     public Thematic(int id, String name, List<Party> parties, List<Secret> secrets) {
         this.setId(id);
@@ -66,7 +76,7 @@ public class Thematic {
     }
 
     public List<Secret> getSecrets() {
-        return secrets;
+        return new ArrayList<Secret>(secrets);
     }
 
     public void setSecrets(List<Secret> secrets) {
