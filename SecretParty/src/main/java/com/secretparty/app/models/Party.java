@@ -29,12 +29,12 @@ import java.util.List;
 public class Party {
     private int id;
     private String name;
-    private Timestamp timestamp;
+    private long date;
     private int length;
     private List<User> users;
     private Thematic thematic;
 
-    public Party(int id, String name, Date date, int length, List<User> users, Thematic thematic) {
+    public Party(int id, String name, long date, int length, List<User> users, Thematic thematic) {
         this.setId(id);
         this.setName(name);
         this.setUsers(users);
@@ -78,14 +78,13 @@ public class Party {
         this.length = length;
     }
 
-    public Date getDate() {
-        return new Date(timestamp.getTime());
+    public long getDate() {
+        return date;
     }
 
-    public void setDate(Date date) {
-        this.timestamp = new Timestamp(date.getTime());
+    public void setDate(long date) {
+        this.date = date;
     }
-
     public Thematic getThematic() {
         return thematic;
     }
@@ -95,15 +94,7 @@ public class Party {
     }
 
     public boolean isPlaying() {
-        return this.getDate() != null;
-    }
-
-    public Timestamp getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(Timestamp timestamp) {
-        this.timestamp = timestamp;
+        return this.getDate() != 0;
     }
 
 }

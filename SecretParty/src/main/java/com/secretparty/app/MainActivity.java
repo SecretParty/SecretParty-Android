@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.secretparty.app.api.APIService;
 import com.secretparty.app.models.Party;
@@ -58,7 +59,7 @@ public class MainActivity extends ActionBarActivity implements FragmentEvent.The
 
         if (savedInstanceState == null) {
             SharedPreferences prefs = this.getPreferences(MODE_PRIVATE);
-            int userId = prefs.getInt(getString(R.string.SP_user_id), -1);
+           // int userId = prefs.getInt(getString(R.string.SP_user_id), -1);
             int partyId = prefs.getInt(getString(R.string.SP_party_id), -1);
             long partyEnd = prefs.getLong(getString(R.string.SP_date_party_end), -1);
 
@@ -74,9 +75,18 @@ public class MainActivity extends ActionBarActivity implements FragmentEvent.The
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_add_party, menu);
         return true;
+    }
+
+
+    private void joinParty(Party p) {
+        SharedPreferences prefs = this.getPreferences(MODE_PRIVATE);
+        prefs.edit()//.putInt(getString(R.string.SP_user_id), user.getId())
+                .putInt(getString(R.string.SP_user_id),p.getId())
+                .putLong(getString(R.string.SP_date_party_end),p.getDate() + p.getLength()*100)//calcul of the party end timestamp.
+                .commit();
+        this.mCurrentParty = p;
     }
 
     @Override
@@ -133,7 +143,7 @@ public class MainActivity extends ActionBarActivity implements FragmentEvent.The
     @Override
     public void onPartyJoined(final int thematicPos, final int partyPos, final String username, final int secretId) {
         // Send request for join party
-        api.joinParty(username,secretId,getThematics().get(thematicPos).getParties().get(partyPos).getId(),new onPartyJoin());
+        api.joinParty(username, secretId, getThematics().get(thematicPos).getParties().get(partyPos).getId(), new onPartyJoin());
     }
 
     @Override
@@ -174,8 +184,8 @@ public class MainActivity extends ActionBarActivity implements FragmentEvent.The
 
         @Override
         public void failure(RetrofitError retrofitError) {
-            Log.i("API", "FAIL request getThematics : " + retrofitError.getMessage());
-            //TODO message d'erreur
+            Log.i("API", "FAIL request getThematics : " + retrofitError.getMessage() +" | " + retrofitError.getResponse().getReason());
+            Toast.makeText(MainActivity.this,R.string.thematic_loading_fail, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -192,7 +202,7 @@ public class MainActivity extends ActionBarActivity implements FragmentEvent.The
         @Override
         public void failure(RetrofitError retrofitError) {
             Log.i("API", "FAIL request getParty : " + retrofitError.getMessage());
-            //TODO message d'erreur
+            Toast.makeText(MainActivity.this,R.string.PartyLoadingFailed, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -200,13 +210,14 @@ public class MainActivity extends ActionBarActivity implements FragmentEvent.The
         @Override
         public void success(User user, Response response) {
             Log.i("API", "OK request joinParty");
-            MainActivity.this.mCurrentParty = user.getParty();
+            MainActivity.this.joinParty(user.getParty());
             //TODO action post join party
         }
 
         @Override
         public void failure(RetrofitError retrofitError) {
             Log.i("API", "FAIL request joinParty : " + retrofitError.getMessage());
+            Toast.makeText(MainActivity.this,R.string.PartyJoiningFail, Toast.LENGTH_LONG).show();
         }
     }
 
@@ -214,13 +225,20 @@ public class MainActivity extends ActionBarActivity implements FragmentEvent.The
         @Override
         public void success(Party party, Response response) {
             Log.i("API", "OK request createdParty");
-            MainActivity.this.mCurrentParty = party;
+           // MainActivity.this.joinParty(party);
             //TODO action post created party
+            if(MainActivity.this.getThematics().contains(party.getThematic())) {
+                Log.d("API", "doexists");
+            }
+            else {
+                Log.d("API", "do not exists");
+            }
         }
 
         @Override
         public void failure(RetrofitError retrofitError) {
             Log.i("API", "FAIL request createdParty : " + retrofitError.getMessage());
+            Toast.makeText(MainActivity.this,R.string.PartyCreationFail, Toast.LENGTH_LONG).show();
         }
     }
 }

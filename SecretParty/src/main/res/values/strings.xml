@@ -41,5 +41,9 @@
     <string name="ask_duration">Choose a duration (in minutes)</string>
     <string name="party_creation_cancel">Cancelling party creation...</string>
     <string name="party_join_cancel">The party wasn\'t joined.</string>
+    <string name="thematic_loading_fail">Error loading the thematics.</string>
+    <string name="PartyLoadingFailed">Unable to join a party</string>
+    <string name="PartyJoiningFail">Unable to join a party</string>
+    <string name="PartyCreationFail">Party creation failed</string>
 
 </resources>

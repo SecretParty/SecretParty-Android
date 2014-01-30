@@ -84,4 +84,8 @@ public class Thematic {
     public String toString() {
         return this.getName();
     }
+
+    public void addParty(Party party) {
+        this.getParties().add(party);
+    }
 }

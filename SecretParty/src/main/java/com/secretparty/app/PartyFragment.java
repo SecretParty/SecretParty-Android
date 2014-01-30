@@ -74,7 +74,7 @@ public class PartyFragment extends Fragment {
 
         partyName.setText(currentParty.getName());
         partyThematic.setText(currentParty.getThematic().getName());
-        partyTimeLeft.setText(getRemainingTimeString(currentParty.getDate()));
+        partyTimeLeft.setText(getRemainingTimeString(new Date(currentParty.getDate())));
 
         divider.setBackgroundColor(getResources().getIntArray(R.array.pic_color)[currentParty.getThematic().getColor()]);
 
