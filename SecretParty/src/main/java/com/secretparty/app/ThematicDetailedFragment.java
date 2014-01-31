@@ -63,7 +63,7 @@ public class ThematicDetailedFragment extends Fragment {
         ListView party_list = (ListView) rootView.findViewById(R.id.list);
 
 
-        PartyAdapter adapter = new PartyAdapter(this.getActivity(), mCallback.getPartiesShown());
+        final PartyAdapter adapter = new PartyAdapter(this.getActivity(), mCallback.getPartiesShown());
         party_list.setAdapter(adapter);
         party_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -73,7 +73,8 @@ public class ThematicDetailedFragment extends Fragment {
                 if(prev != null)
                     ft.remove(prev);
                 ft.addToBackStack(null);
-                DialogFragment frag = PartyDetailsDialog.newInstance((int)id, i);
+                DialogFragment frag = PartyDetailsDialog.newInstance(adapter.getItem(i).getThematic().getId(), (int)id);
+
                 frag.show(ft, "dialog");
             }
         });

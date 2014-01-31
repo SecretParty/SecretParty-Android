@@ -46,9 +46,8 @@ public class PartyDetailsDialog extends DialogFragment {
     static PartyDetailsDialog newInstance(int thematicPos, int partyPos) {
         PartyDetailsDialog f = new PartyDetailsDialog();
 
-        // Supply num input as an argument.
         Bundle args = new Bundle();
-        args.putInt(PartyFragment.PARTY_POS, partyPos);
+        args.putInt(MainActivity.PARTY_ID, partyPos);
         args.putInt(ThematicDetailedFragment.THEMATIC_ID, thematicPos);
         f.setArguments(args);
 
@@ -72,7 +71,6 @@ public class PartyDetailsDialog extends DialogFragment {
         if(thematicId==-1 || partyId==-1) {
             Log.e(TAG, "Error while giving the thematic or Party position");
         }
-        //TODO : stop using freaking positions
         final List<Secret> secrets = mCallback.getThematicRepository().get(thematicId).getSecrets();
 
         View rootView = getActivity().getLayoutInflater().inflate(R.layout.join_party_layout, null);

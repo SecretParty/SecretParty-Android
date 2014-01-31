@@ -65,7 +65,7 @@ public interface APIService {
     @FormUrlEncoded
     @POST("/party/{id}/join")
     void    joinParty(@Path("id") Integer partyId,
-                   @Field("user[id]") Integer userId,
-                   @Field("user[secret]") Integer idSecret,
+                   @Field("party_user_secret[secret]") Integer idSecret,
+                   @Field("party_user_secret[user]") Integer userId,
                    Callback<Party> partyCallback);
 }

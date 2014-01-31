@@ -60,7 +60,7 @@ public class MainActivity extends ActionBarActivity implements FragmentEvent.The
         setContentView(R.layout.activity_main);
         SharedPreferences prefs = this.getPreferences(MODE_PRIVATE);
 
-        thematicRepo = new ThematicRepository(this);
+        thematicRepo =((SecretPartyApplication) getApplication()).getThematicRepository();
         api = ((SecretPartyApplication) getApplication()).getApiService();
 
         //TODO : check if thematics are in the database. If so, launch a ThematicFragment. Otherwise, download them, save them to the db and launch TheamticFragment
@@ -144,7 +144,7 @@ public class MainActivity extends ActionBarActivity implements FragmentEvent.The
     }
     @Override
     public void onThematicSelected(int thematicId) {
-        api.getParties(thematicId,new PartiesCallback());
+        api.getParties(thematicId,new PartiesCallback(thematicId));
     }
 
     @Override
@@ -159,7 +159,7 @@ public class MainActivity extends ActionBarActivity implements FragmentEvent.The
         if(userId==-1) {
             Toast.makeText(this,R.string.user_creation_required, Toast.LENGTH_LONG).show();
         } else {
-            api.joinParty(userId, secretId, partyId, new onPartyJoin());
+            api.joinParty(partyId,secretId, userId, new onPartyJoin());
         }
     }
 
@@ -258,10 +258,15 @@ public class MainActivity extends ActionBarActivity implements FragmentEvent.The
     }
 
     private class PartiesCallback implements Callback<ArrayList<Party>> {
+        private final Thematic thematic;
 
+        public PartiesCallback(int thematicId) {
+            this.thematic= thematicRepo.get(thematicId);
+        }
         @Override
         public void success(ArrayList<Party> parties, Response response) {
         MainActivity.this.mPartiesShown = parties;
+
         ThematicDetailedFragment newFragment = new ThematicDetailedFragment();
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

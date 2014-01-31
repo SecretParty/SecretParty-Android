@@ -46,7 +46,9 @@ public class Thematic {
         this.setParties(parties);
         this.setSecrets(secrets);
     }
-
+    public Thematic(int id) {
+        this(id,null,null,null);
+    }
     public Thematic() {
 
     }

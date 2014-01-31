@@ -40,6 +40,7 @@ public class Party {
         this.setUsers(users);
         this.setDate(date);
         this.setLength(length);
+        this.setThematic(thematic);
     }
 
     public Party() {
