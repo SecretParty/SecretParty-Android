@@ -51,8 +51,8 @@ public interface APIService {
     void createParty(@Field("party_user[party][name]") String partyName,
                      @Field("party_user[party][length]") Integer length,
                      @Field("party_user[party][thematic]") Integer idThematic,
-                     @Field("party_user[user][id]") Integer userId,
-                     @Field("party_user[user][secret]") Integer idSecret, Callback<Party> partyCallback);
+                     @Field("party_user[secret]") Integer idSecret,
+                     @Field("party_user[user]") Integer idUser, Callback<Party> partyCallback);
 
 
 

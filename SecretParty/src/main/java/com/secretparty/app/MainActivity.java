@@ -29,11 +29,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.google.gson.JsonObject;
 import com.secretparty.app.api.APIService;
 import com.secretparty.app.db.ThematicRepository;
 import com.secretparty.app.models.Party;
 import com.secretparty.app.models.Thematic;
 import com.secretparty.app.models.User;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -94,7 +97,7 @@ public class MainActivity extends ActionBarActivity implements FragmentEvent.The
     private void openParty(Party p) {
         SharedPreferences prefs = getPreferences(MODE_PRIVATE);
         prefs.edit()//.putInt(getString(R.string.SP_user_id), user.getId())
-                .putInt(getString(R.string.SP_user_id),p.getId())
+                .putInt(getString(R.string.SP_party_id),p.getId())
                 .putLong(getString(R.string.SP_date_party_end),p.getDate() + p.getLength()*100)//calcul of the party end timestamp.
                 .commit();
         this.mCurrentParty = p;
@@ -170,7 +173,8 @@ public class MainActivity extends ActionBarActivity implements FragmentEvent.The
         if(userId==-1) {
             Toast.makeText(this,R.string.user_creation_required, Toast.LENGTH_LONG).show();
         } else {
-            api.createParty(partyName,duration,thematicId,userId,secretId,new OnCreatedParty());
+            Log.d("PartyCreated", "t"+thematicId + "s:" + secretId + "u:" + userId);
+            api.createParty(partyName,duration,thematicId,secretId,userId,new OnCreatedParty());
         }
     }
 
@@ -237,6 +241,8 @@ public class MainActivity extends ActionBarActivity implements FragmentEvent.The
 
         @Override
         public void failure(RetrofitError retrofitError) {
+            Log.e("API", ((JsonObject) retrofitError.getBodyAs(JsonObject.class)).toString());
+
             Log.i("API", "FAIL request createdParty : " + retrofitError.getMessage());
             Toast.makeText(MainActivity.this,R.string.PartyCreationFail, Toast.LENGTH_LONG).show();
         }
