@@ -24,7 +24,9 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBarActivity;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -62,6 +64,7 @@ public class ThematicDetailedFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.listview_fragment, container, false);
         ListView party_list = (ListView) rootView.findViewById(R.id.list);
 
+        ((ActionBarActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         final PartyAdapter adapter = new PartyAdapter(this.getActivity(), mCallback.getPartiesShown());
         party_list.setAdapter(adapter);
@@ -78,7 +81,6 @@ public class ThematicDetailedFragment extends Fragment {
                 frag.show(ft, "dialog");
             }
         });
-
 
 
         return rootView;

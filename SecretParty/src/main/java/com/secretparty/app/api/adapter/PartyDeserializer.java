@@ -53,7 +53,7 @@ public class PartyDeserializer implements JsonDeserializer<Party> {
         int id = obj.get("id").getAsInt();
         int length = obj.get("length").getAsInt();
         String name = obj.get("name").getAsString();
-        long timestamp = obj.get("date").getAsLong();
+        Date date = new Date(obj.get("date").getAsLong()*1000);
         List<User> userList = new ArrayList<User>();
         JsonArray users = obj.get("users").getAsJsonArray();
         Gson gson = new Gson();
@@ -63,6 +63,6 @@ public class PartyDeserializer implements JsonDeserializer<Party> {
         }
         Thematic t = thematicRepository.get(obj.get("thematic_id").getAsInt());
         Log.v("Called", "called");
-        return new Party(id,name,timestamp,length,userList,t);
+        return new Party(id,name,date,length,userList,t);
     }
 }

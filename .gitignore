@@ -24,6 +24,11 @@ proguard/
 
 
 # Intellij project files
+.idea/workspace.xml
+.idea/libraries
+.idea/libraries/*
+*.iws
+
 # Gradle folder and build
 .gradle/
 build/
@@ -35,10 +40,6 @@ build/
 local.properties
 /*/local.properties
 /*/out
-
-# Idea non-crucial project fileS
-*.iwsï»¿
-
 
 #Android keystore
 *.keystores

@@ -22,6 +22,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by MagicMicky on 24/01/14.
@@ -61,6 +63,12 @@ public class PartyFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        ActionBarActivity act = (ActionBarActivity) getActivity();
+        if(act.getSupportFragmentManager().getBackStackEntryCount() == 0) {
+            act.getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+        }
+
+
         View rootView = inflater.inflate(R.layout.party_layout, container, false);
         TextView partyName, partyTimeLeft, partyThematic;
         View divider;
@@ -75,7 +83,7 @@ public class PartyFragment extends Fragment {
 
         partyName.setText(currentParty.getName());
         partyThematic.setText(currentParty.getThematic().getName());
-        partyTimeLeft.setText(getRemainingTimeString(new Date(currentParty.getDate())));
+        partyTimeLeft.setText(getRemainingTimeString(currentParty.getFinishDate()));
 
         divider.setBackgroundColor(getResources().getIntArray(R.array.pic_color)[currentParty.getThematic().getColor()]);
 
@@ -92,10 +100,11 @@ public class PartyFragment extends Fragment {
         c2.setTime(end);
         long mil1 = c1.getTimeInMillis();
         long mil2 = c2.getTimeInMillis();
-        long diff = mil1 - mil2;
-        long sec = diff / 1000;
-        long min = diff / (60*1000);
-        return getString(R.string.remainingTime, sec, min);
+        long diff = (mil2 - mil1)/1000; //secs
+        long sec = diff %60;
+        diff/=60;
+        long min = diff % 60;
+        return getString(R.string.remainingTime, min, sec);
     }
 
 

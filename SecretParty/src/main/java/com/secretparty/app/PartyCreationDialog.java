@@ -105,7 +105,7 @@ public class PartyCreationDialog extends DialogFragment {
                 .setPositiveButton(R.string.join, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         String partyName = String.valueOf(((EditText)getDialog().findViewById(R.id.ET_party_name)).getText());
-                        int duration = Integer.parseInt(String.valueOf(((EditText) getDialog().findViewById(R.id.ET_party_duration)).getText()));
+                        int duration = 60*Integer.parseInt(String.valueOf(((EditText) getDialog().findViewById(R.id.ET_party_duration)).getText()));
                         Thematic t = thematics.get(thematicChosen);
                         Secret s = t.getSecrets().get(secretChosen);
                         dismiss();

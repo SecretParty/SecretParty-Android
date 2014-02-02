@@ -71,7 +71,7 @@ public class MainActivity extends ActionBarActivity implements FragmentEvent.The
         int userId = prefs.getInt(getString(R.string.SP_user_id), -1);
         int partyId = prefs.getInt(getString(R.string.SP_party_id), -1);
         long partyEnd = prefs.getLong(getString(R.string.SP_date_party_end), -1);
-
+        Log.v("creation", new Date(partyEnd).toLocaleString() + "");
         if (new Date().compareTo(new Date(partyEnd)) < 0) {
             // Send request getParty
             api.getParty(partyId, new OnReceivedParty());
@@ -96,9 +96,10 @@ public class MainActivity extends ActionBarActivity implements FragmentEvent.The
 
     private void openParty(Party p) {
         SharedPreferences prefs = getPreferences(MODE_PRIVATE);
+        Log.v("creation", "PartyDate:" + p.getFinishDate().toLocaleString());
         prefs.edit()//.putInt(getString(R.string.SP_user_id), user.getId())
                 .putInt(getString(R.string.SP_party_id),p.getId())
-                .putLong(getString(R.string.SP_date_party_end),p.getDate() + p.getLength()*100)//calcul of the party end timestamp.
+                .putLong(getString(R.string.SP_date_party_end),p.getFinishDate().getTime())
                 .commit();
         this.mCurrentParty = p;
 
@@ -106,7 +107,7 @@ public class MainActivity extends ActionBarActivity implements FragmentEvent.The
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, newFragment);
-        transaction.addToBackStack(null);
+      //  transaction.addToBackStack(null);
         transaction.commit();
 
 
@@ -115,6 +116,9 @@ public class MainActivity extends ActionBarActivity implements FragmentEvent.The
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case android.R.id.home:
+                getSupportFragmentManager().popBackStack();
+                return true;
             case R.id.action_settings:
                 return true;
             case R.id.action_add:
@@ -271,14 +275,12 @@ public class MainActivity extends ActionBarActivity implements FragmentEvent.The
         }
         @Override
         public void success(ArrayList<Party> parties, Response response) {
-        MainActivity.this.mPartiesShown = parties;
-
-        ThematicDetailedFragment newFragment = new ThematicDetailedFragment();
-
-        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.container, newFragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
+            MainActivity.this.mPartiesShown = parties;
+            ThematicDetailedFragment newFragment = new ThematicDetailedFragment();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            transaction.replace(R.id.container, newFragment);
+            transaction.addToBackStack(null);
+            transaction.commit();
         }
 
         @Override
