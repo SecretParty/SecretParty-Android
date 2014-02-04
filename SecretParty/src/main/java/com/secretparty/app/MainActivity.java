@@ -72,13 +72,7 @@ public class MainActivity extends ActionBarActivity implements FragmentEvent.The
         int partyId = prefs.getInt(getString(R.string.SP_party_id), -1);
         long partyEnd = prefs.getLong(getString(R.string.SP_date_party_end), -1);
         Log.v("creation", new Date(partyEnd).toLocaleString() + "");
-        if (new Date().compareTo(new Date(partyEnd)) < 0) {
-            // Send request getParty
-            api.getParty(partyId, new OnReceivedParty());
-        } else {
-            // Send request getThematics
-            api.listThematics(new OnReceivedThematics());
-        }
+        api.listThematics(new OnReceivedThematics());
 
         if(userId == -1) {
             DialogFragment df = new UserCreationDialog();

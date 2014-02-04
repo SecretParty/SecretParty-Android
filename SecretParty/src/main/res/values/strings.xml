@@ -31,7 +31,6 @@
     <string name="join">Join</string>
     <string name="ask_username">Type in your username</string>
     <string name="ask_secret">Choose your secret</string>
-    <string name="remainingTime">%1$d:%2$d</string>
     <string name="SP_date_party_end">SP_date_party_end</string>
     <string name="SP_user_id">SP_user_id</string>
     <string name="SP_party_id">SP_party_id</string>
@@ -49,5 +48,9 @@
     <string name="user_created">User created successfuly</string>
     <string name="user_creation_failed">Failed creating a new user...</string>
     <string name="parties_listing_failes">Failed listing the parties.</string>
+    <string name="remainingTimeMoreThanH">More than %1$d h remaining</string>
+    <string name="remainingTime">%1$d min remaining</string>
+    <string name="remaingTimeH">%1$d hours remaining</string>
+    <string name="remainingTimeLessThanM">Less than %1$d min remaining</string>
 
 </resources>

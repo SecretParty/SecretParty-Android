@@ -104,7 +104,21 @@ public class PartyFragment extends Fragment {
         long sec = diff %60;
         diff/=60;
         long min = diff % 60;
-        return getString(R.string.remainingTime, min, sec);
+
+        if(min > 120) {
+            return getString(R.string.remainingTimeMoreThanH, 2);
+        } else if (min > 90) {
+            return getString(R.string.remaingTimeH, 2);
+        } else if (min > 50) {
+            return getString(R.string.remaingTimeH, 1);
+        } else if(min > 35) {
+            return getString(R.string.remainingTime, 30);
+        } else if (min > 20) {
+            return getString(R.string.remainingTime, 20);
+        } else if(min > 10) {
+            return getString(R.string.remainingTime,15);
+        }
+        return getString(R.string.remainingTimeLessThanM, 10);
     }
 
 
