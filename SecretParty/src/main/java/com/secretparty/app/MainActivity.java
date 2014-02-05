@@ -128,8 +128,11 @@ public class MainActivity extends ActionBarActivity implements FragmentEvent.The
     }
 
     @Override
-    public void onBuzzPlayer(int buzzerId, int buzzeeId, int secretId) {
-        //TODO:
+    public void onBuzzPlayer(int partyId, int buzzerId, int buzzeeId, int secretId) {
+
+        Log.d("Test", "Party:" + partyId + " buzzer:" + buzzerId + " buzzee" + buzzeeId + " secret:" + secretId);
+
+        this.api.buzzPlayer(partyId,buzzerId,buzzeeId,secretId,new VoidCallback());
     }
 
     @Override
@@ -287,6 +290,19 @@ public class MainActivity extends ActionBarActivity implements FragmentEvent.The
             Log.e("API", "Fail request user creation : " + retrofitError.getMessage());
             Toast.makeText(MainActivity.this, R.string.parties_listing_failes,Toast.LENGTH_LONG).show();
 
+        }
+    }
+
+    private class VoidCallback implements Callback<Void> {
+        @Override
+        public void success(Void aVoid, Response response) {
+            Log.v("API", "Everything went good");
+        }
+
+        @Override
+        public void failure(RetrofitError retrofitError) {
+            Log.e("API", ((JsonObject) retrofitError.getBodyAs(JsonObject.class)).toString());
+            Log.e("API", "Fail request for void : " + retrofitError.getMessage());
         }
     }
 }

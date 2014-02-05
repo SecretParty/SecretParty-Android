@@ -68,4 +68,12 @@ public interface APIService {
                    @Field("party_user_secret[secret]") Integer idSecret,
                    @Field("party_user_secret[user]") Integer userId,
                    Callback<Party> partyCallback);
+
+    @FormUrlEncoded
+    @POST("/party/{id}/buzz")
+    void buzzPlayer(@Path("id") int partyId,
+                    @Field("buzz[buzzer]") int buzzerId,
+                    @Field("buzz[buzzee]") int buzzeeId,
+                    @Field("buzz[secret]") int secretId,
+                    Callback<Void> voidCallback);
 }

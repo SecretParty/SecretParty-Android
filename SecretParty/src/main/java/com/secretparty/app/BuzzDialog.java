@@ -97,7 +97,7 @@ public class BuzzDialog extends DialogFragment {
                 .setPositiveButton(R.string.buzz, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dismiss();
-                        mCallback.onBuzzPlayer(buzzerId,buzzeeId,mSelectedSecretId);
+                        mCallback.onBuzzPlayer(mCallback.getParty().getId(), buzzerId,buzzeeId,mSelectedSecretId);
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

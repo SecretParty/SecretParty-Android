@@ -171,9 +171,9 @@ public class PartyFragment extends Fragment {
             }
             TextView username = (TextView) convertView.findViewById(R.id.TV_user_name);
             User u = getItem(i);
-            convertView.setId(u.getId());
             username.setText(u.getName());
             ImageButton buzz = (ImageButton) convertView.findViewById(R.id.BTN_buzz);
+            buzz.setId(u.getId());
             if(u.getId() == mUserId )
                 buzz.setVisibility(View.GONE);
             else

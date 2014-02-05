@@ -68,7 +68,7 @@ public interface FragmentEvent {
          * @param buzzerId the userId who launches the buzz process
          * @param buzzeeId the userId buzzed by the other one.
          */
-        public void onBuzzPlayer(int buzzerId, int buzzeeId, int secretId);
+        public void onBuzzPlayer(int partyId, int buzzerId, int buzzeeId, int secretId);
 
         /**
          * Should return the current party
