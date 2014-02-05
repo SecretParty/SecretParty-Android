@@ -154,11 +154,17 @@ public class MainActivity extends ActionBarActivity implements FragmentEvent.The
     @Override
     public void onPartyJoined(final int partyId, final int secretId) {
         int userId = getPreferences(MODE_PRIVATE).getInt(getString(R.string.SP_user_id),-1);
+        int currentPartyId = getPreferences(MODE_PRIVATE).getInt(getString(R.string.SP_party_id),-1);
         // Send request join party
         if(userId==-1) {
             Toast.makeText(this,R.string.user_creation_required, Toast.LENGTH_LONG).show();
         } else {
-            api.joinParty(partyId,secretId, userId, new onPartyJoin());
+            Log.d("test", currentPartyId +"!="+partyId);
+            if(currentPartyId == partyId) {
+                api.getParty(partyId, new OnReceivedParty());
+            } else {
+                api.joinParty(partyId,secretId, userId, new onPartyJoin());
+            }
         }
     }
 

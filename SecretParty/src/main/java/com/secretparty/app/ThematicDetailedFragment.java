@@ -20,6 +20,7 @@ package com.secretparty.app;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -43,13 +44,13 @@ import java.util.List;
  */
 public class ThematicDetailedFragment extends Fragment {
     public static final String THEMATIC_ID = "THEMATIC_ID";
-    private FragmentEvent mCallback;
+    private FragmentEvent.PartySelectedListener mCallback;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mCallback = (FragmentEvent) activity;
+            mCallback = (FragmentEvent.PartySelectedListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnHeadlineSelectedListener");
@@ -71,14 +72,22 @@ public class ThematicDetailedFragment extends Fragment {
         party_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long id) {
-                FragmentTransaction ft = getFragmentManager().beginTransaction();
-                Fragment prev = getFragmentManager().findFragmentByTag("Dialog");
-                if(prev != null)
-                    ft.remove(prev);
-                ft.addToBackStack(null);
-                DialogFragment frag = PartyDetailsDialog.newInstance(adapter.getItem(i).getThematic().getId(), (int)id);
+                SharedPreferences prefs = getActivity().getPreferences(Activity.MODE_PRIVATE);
+                int partyId = prefs.getInt(getString(R.string.SP_party_id),-1);
+                //If the party is the user's current party
+                if(partyId == id) {
+                    mCallback.onPartyJoined((int)id,0);
+                }
+                else {
+                    FragmentTransaction ft = getFragmentManager().beginTransaction();
+                    Fragment prev = getFragmentManager().findFragmentByTag("Dialog");
+                    if(prev != null)
+                        ft.remove(prev);
+                    ft.addToBackStack(null);
+                    DialogFragment frag = PartyDetailsDialog.newInstance(adapter.getItem(i).getThematic().getId(), (int)id);
 
-                frag.show(ft, "dialog");
+                    frag.show(ft, "dialog");
+                }
             }
         });
 
