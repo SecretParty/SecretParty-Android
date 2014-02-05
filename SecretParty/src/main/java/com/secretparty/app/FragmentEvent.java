@@ -65,10 +65,10 @@ public interface FragmentEvent {
     public interface BuzzListener extends FragmentEvent {
         /**
          * Buzz a user
-         * @param buzer the user who launches the buzz process
-         * @param buzee the user buzzed by the other one.
+         * @param buzzerId the userId who launches the buzz process
+         * @param buzzeeId the userId buzzed by the other one.
          */
-        public void onBuzzPlayer(User buzer, User buzee);
+        public void onBuzzPlayer(int buzzerId, int buzzeeId, int secretId);
 
         /**
          * Should return the current party

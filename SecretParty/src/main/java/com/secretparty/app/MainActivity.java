@@ -101,10 +101,8 @@ public class MainActivity extends ActionBarActivity implements FragmentEvent.The
 
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, newFragment);
-      //  transaction.addToBackStack(null);
+        transaction.addToBackStack(null);
         transaction.commit();
-
-
     }
 
     @Override
@@ -130,7 +128,7 @@ public class MainActivity extends ActionBarActivity implements FragmentEvent.The
     }
 
     @Override
-    public void onBuzzPlayer(User buzer, User buzee) {
+    public void onBuzzPlayer(int buzzerId, int buzzeeId, int secretId) {
         //TODO:
     }
 

@@ -117,8 +117,10 @@ public class PartyFragment extends Fragment {
             return getString(R.string.remainingTime, 20);
         } else if(min > 10) {
             return getString(R.string.remainingTime,15);
+        } else if(min > 1) {
+            return getString(R.string.remainingTimeLessThanM, min);
         }
-        return getString(R.string.remainingTimeLessThanM, 10);
+        return getString(R.string.remainingTimeLessThanS,sec);
     }
 
 

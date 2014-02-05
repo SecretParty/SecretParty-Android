@@ -51,6 +51,7 @@
     <string name="remainingTimeMoreThanH">More than %1$d h remaining</string>
     <string name="remainingTime">%1$d min remaining</string>
     <string name="remaingTimeH">%1$d hours remaining</string>
-    <string name="remainingTimeLessThanM">Less than %1$d min remaining</string>
+    <string name="remainingTimeLessThanM">%1$d min remaining</string>
+    <string name="remainingTimeLessThanS">%1$d sec remaining</string>
 
 </resources>
