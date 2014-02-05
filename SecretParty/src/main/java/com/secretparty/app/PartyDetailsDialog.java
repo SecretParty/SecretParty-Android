@@ -43,12 +43,12 @@ public class PartyDetailsDialog extends DialogFragment {
     private FragmentEvent.PartySelectedListener mCallback;
     private int secretChosen = 0;
 
-    static PartyDetailsDialog newInstance(int thematicPos, int partyPos) {
+    static PartyDetailsDialog newInstance(int thematicId, int partyId) {
         PartyDetailsDialog f = new PartyDetailsDialog();
 
         Bundle args = new Bundle();
-        args.putInt(MainActivity.PARTY_ID, partyPos);
-        args.putInt(ThematicDetailedFragment.THEMATIC_ID, thematicPos);
+        args.putInt(MainActivity.PARTY_ID, partyId);
+        args.putInt(ThematicDetailedFragment.THEMATIC_ID, thematicId);
         f.setArguments(args);
 
         return f;

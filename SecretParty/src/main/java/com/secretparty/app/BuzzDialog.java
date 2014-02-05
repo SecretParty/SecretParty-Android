@@ -47,11 +47,11 @@ public class BuzzDialog extends DialogFragment {
     private FragmentEvent.BuzzListener mCallback;
     private int mSelectedSecretId;
 
-    static BuzzDialog newInstance(Thematic t, User buzzee) {
+    static BuzzDialog newInstance(int thematicId, int buzzeeId) {
         BuzzDialog f = new BuzzDialog();
         Bundle args = new Bundle();
-        args.putInt(ThematicDetailedFragment.THEMATIC_ID, t.getId());
-        args.putInt(BUZZEE_ID, buzzee.getId());
+        args.putInt(ThematicDetailedFragment.THEMATIC_ID, thematicId);
+        args.putInt(BUZZEE_ID, buzzeeId);
         f.setArguments(args);
         return f;
     }
@@ -93,8 +93,8 @@ public class BuzzDialog extends DialogFragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(rootView)
-                .setTitle(R.string.party_join_dialog)
-                .setPositiveButton(R.string.join, new DialogInterface.OnClickListener() {
+                .setTitle(R.string.party_buzz_dialog)
+                .setPositiveButton(R.string.buzz, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         dismiss();
                         mCallback.onBuzzPlayer(buzzerId,buzzeeId,mSelectedSecretId);

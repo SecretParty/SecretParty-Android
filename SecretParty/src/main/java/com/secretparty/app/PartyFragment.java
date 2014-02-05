@@ -20,19 +20,25 @@ package com.secretparty.app;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.secretparty.app.models.Party;
+import com.secretparty.app.models.Thematic;
 import com.secretparty.app.models.User;
 
 import java.util.ArrayList;
@@ -87,7 +93,7 @@ public class PartyFragment extends Fragment {
 
         divider.setBackgroundColor(getResources().getIntArray(R.array.pic_color)[currentParty.getThematic().getColor()]);
 
-        ListAdapter mAdapter = new UserAdapter(this.getActivity(), currentParty.getUsers());
+        ListAdapter mAdapter = new UserAdapter(this.getActivity(), currentParty.getUsers(),currentParty.getThematic().getId());
         thematic_list.setAdapter(mAdapter);
         thematic_list.setOnItemClickListener(null);
         return rootView;
@@ -128,10 +134,15 @@ public class PartyFragment extends Fragment {
     private class UserAdapter extends BaseAdapter {
         private final Context mContext;
         private final List<User> mUsers;
+        private final int mThematicId;
+        private final int mUserId;
 
-        public UserAdapter(Context context, List<User> users) {
-            this.mContext = context;
+        public UserAdapter(Activity act, List<User> users,int thematicId) {
+            this.mContext = act;
             this.mUsers = users;
+            this.mThematicId = thematicId;
+            SharedPreferences prefs = act.getPreferences(Activity.MODE_PRIVATE);
+            this.mUserId = prefs.getInt(getString(R.string.SP_user_id),-1);
         }
 
         @Override
@@ -160,10 +171,31 @@ public class PartyFragment extends Fragment {
             }
             TextView username = (TextView) convertView.findViewById(R.id.TV_user_name);
             User u = getItem(i);
+            convertView.setId(u.getId());
             username.setText(u.getName());
-
+            ImageButton buzz = (ImageButton) convertView.findViewById(R.id.BTN_buzz);
+            if(u.getId() == mUserId )
+                buzz.setVisibility(View.GONE);
+            else
+                buzz.setOnClickListener(clickListener);
 
             return convertView;
         }
+
+
+        View.OnClickListener clickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                Fragment prev = getFragmentManager().findFragmentByTag("Dialog");
+                if(prev != null)
+                    ft.remove(prev);
+                ft.addToBackStack(null);
+                DialogFragment frag = BuzzDialog.newInstance(mThematicId,view.getId());
+
+                frag.show(ft, "dialog");
+
+            }
+        };
     }
 }

@@ -53,5 +53,7 @@
     <string name="remaingTimeH">%1$d hours remaining</string>
     <string name="remainingTimeLessThanM">%1$d min remaining</string>
     <string name="remainingTimeLessThanS">%1$d sec remaining</string>
+    <string name="buzz">BUZZ!</string>
+    <string name="party_buzz_dialog">Buzz a player</string>
 
 </resources>
