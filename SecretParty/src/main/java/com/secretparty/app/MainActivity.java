@@ -159,7 +159,6 @@ public class MainActivity extends ActionBarActivity implements FragmentEvent.The
         if(userId==-1) {
             Toast.makeText(this,R.string.user_creation_required, Toast.LENGTH_LONG).show();
         } else {
-            Log.d("test", currentPartyId +"!="+partyId);
             if(currentPartyId == partyId) {
                 api.getParty(partyId, new OnReceivedParty());
             } else {
@@ -238,6 +237,8 @@ public class MainActivity extends ActionBarActivity implements FragmentEvent.The
         public void success(Party party, Response response) {
             Log.i("API", "OK request createdParty");
            MainActivity.this.openParty(party);
+           if(mPartiesShown != null && mPartiesShown.get(0).getThematic().getId() == party.getThematic().getId())
+               MainActivity.this.mPartiesShown.add(party);
             //TODO add party to the current parties of the thematic.
         }
 

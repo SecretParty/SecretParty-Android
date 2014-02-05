@@ -102,7 +102,7 @@ public class PartyCreationDialog extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setView(rootView)
                 .setTitle(R.string.party_join_dialog)
-                .setPositiveButton(R.string.join, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.create, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         String partyName = String.valueOf(((EditText)getDialog().findViewById(R.id.ET_party_name)).getText());
                         int duration = 60*Integer.parseInt(String.valueOf(((EditText) getDialog().findViewById(R.id.ET_party_duration)).getText()));
